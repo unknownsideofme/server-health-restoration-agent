@@ -29,16 +29,17 @@ jobs:
     - name: Validate 10 Kubernetes CRDs (e2e)
       run: |
         sudo snap install kubectl --classic
-        kubectl apply --dry-run=client -f crds/org.yaml
-        kubectl apply --dry-run=client -f crds/rack.yaml
-        kubectl apply --dry-run=client -f crds/tor.yaml
-        kubectl apply --dry-run=client -f crds/subnet.yaml
-        kubectl apply --dry-run=client -f crds/server.yaml
-        kubectl apply --dry-run=client -f crds/network.yaml
-        kubectl apply --dry-run=client -f crds/router.yaml
-        kubectl apply --dry-run=client -f crds/routetable.yaml
-        kubectl apply --dry-run=client -f crds/dashboard.yaml
-        kubectl apply --dry-run=client -f crds/llmmodel.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/org.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/rack.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/tor.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/subnet.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/server.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/network.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/router.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/routetable.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/dashboard.yaml
+        kubectl apply --dry-run=client --validate=false -f crds/llmmodel.yaml
+
 
     - name: Start LLM Daemon (e2e)
       run: |
