@@ -1,4 +1,4 @@
-name: AirGap Autonomous AI NOC Copilot CI/CD Pipeline
+name: AirGap End-to-End Integration Pipeline (e2e)
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ main, master ]
 
 jobs:
-  validate-and-test:
-    name: Build, Validate CRDs & Run UT and E2E Tests
+  run-e2e-tests-e2e:
+    name: Run Dedicated End-to-End Integration Suites (e2e)
     runs-on: ubuntu-latest
 
     steps:
@@ -26,11 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install kubernetes pyyaml prometheus_client
 
-    - name: Validate Python Syntax across Codebase
-      run: |
-        python -m compileall pkg/ controllers/ ui/ scripts/ test/
-
-    - name: Validate Kubernetes Custom Resource Definitions (CRDs)
+    - name: Validate 10 Kubernetes CRDs (e2e)
       run: |
         sudo snap install kubectl --classic
         kubectl apply --dry-run=client -f crds/org.yaml
@@ -44,14 +40,21 @@ jobs:
         kubectl apply --dry-run=client -f crds/dashboard.yaml
         kubectl apply --dry-run=client -f crds/llmmodel.yaml
 
-    - name: Run Unit Test Suite (ut)
+    - name: Start LLM Daemon (e2e)
       run: |
-        python test/test_unit_ut.py
+        python pkg/copilot/llm_daemon.py &
+        sleep 2
 
-    - name: Run MCP Skill Unit Tests (ut)
+    - name: Start Web Server (e2e)
       run: |
-        python test/test_mcp_skills.py
+        python ui/server.py &
+        sleep 2
 
-    - name: Run End-to-End Integration Test Suite (e2e)
+    - name: Run Web UI & Telemetry Exporter E2E Tests (e2e)
       run: |
-        python test/test_integration_e2e.py
+        python test/test_dashboard_e2e.py
+
+    - name: Run Local LLM Daemon & MCP E2E Tests (e2e)
+      run: |
+        python test/test_llm_mcp_e2e.py
+

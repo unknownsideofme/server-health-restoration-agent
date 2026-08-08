@@ -81,8 +81,9 @@ class LLMDaemonHandler(http.server.BaseHTTPRequestHandler):
         pass
 
 
-class ReusableTCPServer(socketserver.TCPServer):
+class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     allow_reuse_address = True
+
 
 
 def main():
