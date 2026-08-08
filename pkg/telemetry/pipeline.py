@@ -77,6 +77,12 @@ class TelemetryPipeline:
                 acl_drops = int(random.randint(45, 120) * progress)
                 health_score = max(40.0, 100.0 - acl_drops * 0.5)
 
+        # Calculate dynamic traffic metrics
+        http_requests_per_sec = round(max(5.0, utilization * 14.5 + random.uniform(-10.0, 10.0)), 1)
+        network_traffic_bytes_sec = int(utilization * 1024 * 1024 * 0.85 + random.uniform(10000, 50000))
+        active_tcp_conns = int(utilization * 38 + random.randint(15, 60))
+        error_rate = round(max(0.0, packet_loss * 1.8 + (100.0 - health_score) * 0.12), 2)
+
         snapshot = {
             "timestamp": now,
             "component": component_name,
@@ -89,6 +95,10 @@ class TelemetryPipeline:
                 "bgp_flap_count": bgp_flaps,
                 "acl_drop_count": acl_drops,
                 "health_score": round(health_score, 1),
+                "http_requests_per_sec": http_requests_per_sec,
+                "network_traffic_bytes_sec": network_traffic_bytes_sec,
+                "active_tcp_connections": active_tcp_conns,
+                "error_rate_pct": error_rate,
             },
             "fault_active": fault["type"] if fault else None,
         }

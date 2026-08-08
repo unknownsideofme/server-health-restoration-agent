@@ -41,7 +41,7 @@
           "unit": "percent"
         }
       },
-      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 1 },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
       "id": 1,
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
       "title": "Average System Health Score",
@@ -69,7 +69,7 @@
           "unit": "percent"
         }
       },
-      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 1 },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
       "id": 2,
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
       "title": "Max Predictive Risk Score",
@@ -89,21 +89,47 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
+              { "color": "blue", "value": null }
             ]
-          }
+          },
+          "unit": "reqps"
         }
       },
-      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 1 },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
       "id": 3,
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Active Predictive Alerts Count",
+      "title": "Total HTTP Request Throughput (RPS)",
       "type": "stat",
       "targets": [
         {
-          "expr": "count(airgap_component_risk_score{org=~\"$org\", kind=~\"$kind\"} > 50) or vector(0)",
-          "legendFormat": "Elevated Alerts"
+          "expr": "sum(airgap_http_requests_per_sec{org=~\"$org\", kind=~\"$kind\"})",
+          "legendFormat": "Total RPS"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "purple", "value": null }
+            ]
+          },
+          "unit": "Bps"
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "id": 4,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "title": "Total Network Bandwidth Throughput",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum(airgap_network_traffic_bytes_sec{org=~\"$org\", kind=~\"$kind\"})",
+          "legendFormat": "Total Network Bps"
         }
       ]
     },
@@ -153,12 +179,16 @@
       "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "gridPos": { "h": 6, "w": 12, "x": 0, "y": 13 },
       "id": 20,
-      "title": "Workload Compute Servers - Bandwidth Utilization %",
+      "title": "Workload Compute Servers - HTTP Requests/sec (RPS) & Active TCP Connections",
       "type": "timeseries",
       "targets": [
         {
-          "expr": "airgap_interface_utilization_pct{component=~\".*worker.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} ({{org}})"
+          "expr": "airgap_http_requests_per_sec{component=~\".*worker.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} RPS"
+        },
+        {
+          "expr": "airgap_active_tcp_connections{component=~\".*worker.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Active TCP Sockets"
         }
       ]
     },
@@ -184,40 +214,36 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 19 },
       "id": 400,
-      "title": "🌐 EDGE ROUTERS & CIDR SUBNETS",
+      "title": "⚡ APPLICATION MICROSERVICES & APPS",
       "type": "row"
     },
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "gridPos": { "h": 6, "w": 12, "x": 0, "y": 20 },
-      "id": 30,
-      "title": "Edge Routers - Bandwidth & Route Flaps",
+      "id": 60,
+      "title": "Microservices - HTTP Throughput (RPS)",
       "type": "timeseries",
       "targets": [
         {
-          "expr": "airgap_interface_utilization_pct{kind=\"router\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Utilization %"
-        },
-        {
-          "expr": "airgap_bgp_flap_count{kind=\"router\", org=~\"$org\"}",
-          "legendFormat": "{{component}} BGP Flaps"
+          "expr": "airgap_http_requests_per_sec{kind=\"service\", org=~\"$org\"}",
+          "legendFormat": "{{component}} RPS"
         }
       ]
     },
     {
       "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "gridPos": { "h": 6, "w": 12, "x": 12, "y": 20 },
-      "id": 31,
-      "title": "CIDR Subnets - Health Score & Risk %",
+      "id": 61,
+      "title": "Microservices - Error Rate % & Health Score",
       "type": "timeseries",
       "targets": [
         {
-          "expr": "airgap_component_health_score{kind=\"subnet\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Health Score"
+          "expr": "airgap_error_rate_pct{kind=\"service\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Error Rate %"
         },
         {
-          "expr": "airgap_component_risk_score{kind=\"subnet\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Risk %"
+          "expr": "airgap_component_health_score{kind=\"service\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Health"
         }
       ]
     },
@@ -226,44 +252,6 @@
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
       "id": 500,
-      "title": "🔀 TOR SWITCHES & INFRASTRUCTURE RACKS",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 27 },
-      "id": 40,
-      "title": "Top-of-Rack (TOR) Switches - Interface Utilization %",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_interface_utilization_pct{kind=\"tor\", org=~\"$org\"}",
-          "legendFormat": "{{component}} ({{org}})"
-        }
-      ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 27 },
-      "id": 41,
-      "title": "Infrastructure Racks - Health Score & Risk %",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_component_health_score{kind=\"rack\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Health"
-        },
-        {
-          "expr": "airgap_component_risk_score{kind=\"rack\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Risk %"
-        }
-      ]
-    },
-
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 33 },
-      "id": 600,
       "title": "⌛ PREDICTIVE TIME-TO-IMPACT (TTI) LEAD TIME FORECASTS",
       "type": "row"
     },
@@ -283,10 +271,10 @@
           "unit": "m"
         }
       },
-      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 34 },
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 27 },
       "id": 50,
       "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Predicted Lead Time (TTI Mins) Before SLA Breach",
+      "title": "Predicted Lead Time (TTI Mins) Before SLA Breach across 44 Components",
       "type": "stat",
       "targets": [
         {
@@ -347,5 +335,5 @@
   "timezone": "browser",
   "title": "AirGap Autonomous AI NOC Copilot Dashboard",
   "uid": "airgap-noc-copilot",
-  "version": 2
+  "version": 3
 }

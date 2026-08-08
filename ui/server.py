@@ -25,49 +25,71 @@ copilot = AirGapNOCCopilot(engine)
 injector = FaultInjector()
 
 COMPONENTS = [
-    # Org A
+    # Org A (11 components)
     {"name": "org-a-edge-router", "kind": "router", "org": "org-a", "role": "router"},
     {"name": "tor-a1", "kind": "tor", "org": "org-a", "role": "tor"},
+    {"name": "tor-a2", "kind": "tor", "org": "org-a", "role": "tor"},
     {"name": "rack-a1", "kind": "rack", "org": "org-a", "role": "rack"},
+    {"name": "rack-a2", "kind": "rack", "org": "org-a", "role": "rack"},
     {"name": "subnet-org-a-prod", "kind": "subnet", "org": "org-a", "role": "subnet"},
+    {"name": "subnet-org-a-dev", "kind": "subnet", "org": "org-a", "role": "subnet"},
     {"name": "org-a-admin-01", "kind": "server", "org": "org-a", "role": "admin"},
     {"name": "org-a-admin-02", "kind": "server", "org": "org-a", "role": "admin"},
     {"name": "org-a-admin-03", "kind": "server", "org": "org-a", "role": "admin"},
     {"name": "org-a-worker-01", "kind": "server", "org": "org-a", "role": "worker"},
     {"name": "org-a-worker-02", "kind": "server", "org": "org-a", "role": "worker"},
+    {"name": "org-a-worker-03", "kind": "server", "org": "org-a", "role": "worker"},
+    {"name": "org-a-api-gateway", "kind": "service", "org": "org-a", "role": "service"},
+    {"name": "org-a-auth-service", "kind": "service", "org": "org-a", "role": "service"},
 
-    # Org B
+    # Org B (11 components)
     {"name": "org-b-edge-router", "kind": "router", "org": "org-b", "role": "router"},
     {"name": "tor-b1", "kind": "tor", "org": "org-b", "role": "tor"},
+    {"name": "tor-b2", "kind": "tor", "org": "org-b", "role": "tor"},
     {"name": "rack-b1", "kind": "rack", "org": "org-b", "role": "rack"},
+    {"name": "rack-b2", "kind": "rack", "org": "org-b", "role": "rack"},
     {"name": "subnet-org-b-prod", "kind": "subnet", "org": "org-b", "role": "subnet"},
+    {"name": "subnet-org-b-dev", "kind": "subnet", "org": "org-b", "role": "subnet"},
     {"name": "org-b-admin-01", "kind": "server", "org": "org-b", "role": "admin"},
     {"name": "org-b-admin-02", "kind": "server", "org": "org-b", "role": "admin"},
     {"name": "org-b-admin-03", "kind": "server", "org": "org-b", "role": "admin"},
     {"name": "org-b-worker-01", "kind": "server", "org": "org-b", "role": "worker"},
     {"name": "org-b-worker-02", "kind": "server", "org": "org-b", "role": "worker"},
+    {"name": "org-b-worker-03", "kind": "server", "org": "org-b", "role": "worker"},
+    {"name": "org-b-database-cluster", "kind": "service", "org": "org-b", "role": "service"},
+    {"name": "org-b-cache-redis", "kind": "service", "org": "org-b", "role": "service"},
 
-    # Org C
+    # Org C (11 components)
     {"name": "org-c-edge-router", "kind": "router", "org": "org-c", "role": "router"},
     {"name": "tor-c1", "kind": "tor", "org": "org-c", "role": "tor"},
+    {"name": "tor-c2", "kind": "tor", "org": "org-c", "role": "tor"},
     {"name": "rack-c1", "kind": "rack", "org": "org-c", "role": "rack"},
+    {"name": "rack-c2", "kind": "rack", "org": "org-c", "role": "rack"},
     {"name": "subnet-org-c-prod", "kind": "subnet", "org": "org-c", "role": "subnet"},
+    {"name": "subnet-org-c-dev", "kind": "subnet", "org": "org-c", "role": "subnet"},
     {"name": "org-c-admin-01", "kind": "server", "org": "org-c", "role": "admin"},
     {"name": "org-c-admin-02", "kind": "server", "org": "org-c", "role": "admin"},
     {"name": "org-c-admin-03", "kind": "server", "org": "org-c", "role": "admin"},
     {"name": "org-c-worker-01", "kind": "server", "org": "org-c", "role": "worker"},
     {"name": "org-c-worker-02", "kind": "server", "org": "org-c", "role": "worker"},
+    {"name": "org-c-worker-03", "kind": "server", "org": "org-c", "role": "worker"},
+    {"name": "org-c-kafka-cluster", "kind": "service", "org": "org-c", "role": "service"},
 
-    # Org D
+    # Org D (11 components)
     {"name": "org-d-edge-router", "kind": "router", "org": "org-d", "role": "router"},
     {"name": "tor-d1", "kind": "tor", "org": "org-d", "role": "tor"},
+    {"name": "tor-d2", "kind": "tor", "org": "org-d", "role": "tor"},
     {"name": "rack-d1", "kind": "rack", "org": "org-d", "role": "rack"},
+    {"name": "rack-d2", "kind": "rack", "org": "org-d", "role": "rack"},
     {"name": "subnet-org-d-prod", "kind": "subnet", "org": "org-d", "role": "subnet"},
+    {"name": "subnet-org-d-dev", "kind": "subnet", "org": "org-d", "role": "subnet"},
     {"name": "org-d-admin-01", "kind": "server", "org": "org-d", "role": "admin"},
     {"name": "org-d-admin-02", "kind": "server", "org": "org-d", "role": "admin"},
     {"name": "org-d-admin-03", "kind": "server", "org": "org-d", "role": "admin"},
     {"name": "org-d-worker-01", "kind": "server", "org": "org-d", "role": "worker"},
     {"name": "org-d-worker-02", "kind": "server", "org": "org-d", "role": "worker"},
+    {"name": "org-d-worker-03", "kind": "server", "org": "org-d", "role": "worker"},
+    {"name": "org-d-object-storage", "kind": "service", "org": "org-d", "role": "service"},
 ]
 
 
@@ -107,6 +129,14 @@ class NOCHandler(http.server.SimpleHTTPRequestHandler):
             lines.append("# TYPE airgap_acl_drop_count counter")
             lines.append("# HELP airgap_time_to_impact_minutes Time-to-Impact lead time in minutes")
             lines.append("# TYPE airgap_time_to_impact_minutes gauge")
+            lines.append("# HELP airgap_http_requests_per_sec Live HTTP throughput in requests/sec")
+            lines.append("# TYPE airgap_http_requests_per_sec gauge")
+            lines.append("# HELP airgap_network_traffic_bytes_sec Live network bandwidth throughput in bytes/sec")
+            lines.append("# TYPE airgap_network_traffic_bytes_sec gauge")
+            lines.append("# HELP airgap_active_tcp_connections Active TCP connections count")
+            lines.append("# TYPE airgap_active_tcp_connections gauge")
+            lines.append("# HELP airgap_error_rate_pct HTTP error percentage")
+            lines.append("# TYPE airgap_error_rate_pct gauge")
 
             for comp in COMPONENTS:
                 res = engine.analyze_component(comp["name"], comp["kind"])
@@ -124,6 +154,10 @@ class NOCHandler(http.server.SimpleHTTPRequestHandler):
                 lines.append(f'airgap_jitter_ms{{{labels}}} {m["jitter_ms"]}')
                 lines.append(f'airgap_bgp_flap_count{{{labels}}} {m["bgp_flap_count"]}')
                 lines.append(f'airgap_acl_drop_count{{{labels}}} {m["acl_drop_count"]}')
+                lines.append(f'airgap_http_requests_per_sec{{{labels}}} {m.get("http_requests_per_sec", 15.0)}')
+                lines.append(f'airgap_network_traffic_bytes_sec{{{labels}}} {m.get("network_traffic_bytes_sec", 500000)}')
+                lines.append(f'airgap_active_tcp_connections{{{labels}}} {m.get("active_tcp_connections", 120)}')
+                lines.append(f'airgap_error_rate_pct{{{labels}}} {m.get("error_rate_pct", 0.0)}')
 
                 if res.get("tti_minutes") is not None:
                     lines.append(f'airgap_time_to_impact_minutes{{{labels}}} {res["tti_minutes"]}')
@@ -159,6 +193,7 @@ class NOCHandler(http.server.SimpleHTTPRequestHandler):
                     "subnets": [c for c in topology_data if c["org"] == org_id and c["kind"] == "subnet"],
                     "admin_servers": [c for c in topology_data if c["org"] == org_id and c["kind"] == "server" and c.get("role") == "admin"],
                     "worker_servers": [c for c in topology_data if c["org"] == org_id and c["kind"] == "server" and c.get("role") == "worker"],
+                    "services": [c for c in topology_data if c["org"] == org_id and c["kind"] == "service"],
                 }
 
             resp = {
