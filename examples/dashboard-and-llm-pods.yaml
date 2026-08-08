@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: airgap-dashboard-ui
+  namespace: default
+  labels:
+    app: airgap-dashboard
+    tier: ui
+spec:
+  containers:
+  - name: dashboard
+    image: python:3.12-slim
+    command: ["python3", "-m", "http.server", "8085"]
+    ports:
+    - containerPort: 8085
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: airgap-dashboard-service
+  namespace: default
+spec:
+  selector:
+    app: airgap-dashboard
+  ports:
+  - port: 8085
+    targetPort: 8085
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: airgap-llm-service
+  namespace: default
+  labels:
+    app: airgap-llm
+    tier: ai
+spec:
+  containers:
+  - name: llm-qwen-model
+    image: ollama/ollama:latest
+    ports:
+    - containerPort: 11435
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: airgap-llm-service
+  namespace: default
+spec:
+  selector:
+    app: airgap-llm
+  ports:
+  - port: 11435
+    targetPort: 11435
