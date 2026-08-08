@@ -1,6 +1,15 @@
 {
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
@@ -11,297 +20,332 @@
   "panels": [
     {
       "collapsed": false,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 0
-      },
-      "id": 1,
-      "title": "Overall Min Infrastructure Health Score",
-      "type": "stat",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "min(airgap_component_health_score)",
-          "instant": true,
-          "legendFormat": "Min Health Score",
-          "refId": "A"
-        }
-      ],
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100,
+      "title": "🏢 EXECUTIVE MULTI-ORG SYSTEM OVERVIEW",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 100,
-          "min": 0,
+          "color": { "mode": "thresholds" },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               { "color": "red", "value": null },
-              { "color": "yellow", "value": 40 },
-              { "color": "green", "value": 80 }
+              { "color": "orange", "value": 70 },
+              { "color": "green", "value": 90 }
             ]
           },
-          "unit": "none"
-        },
-        "overrides": []
-      }
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 6,
-        "y": 0
+          "unit": "percent"
+        }
       },
-      "id": 2,
-      "title": "Maximum Component Risk Score",
-      "type": "stat",
+      "gridPos": { "h": 4, "w": 8, "x": 0, "y": 1 },
+      "id": 1,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "title": "Average System Health Score",
+      "type": "gauge",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "max(airgap_component_risk_score)",
-          "instant": true,
-          "legendFormat": "Max Risk %",
-          "refId": "A"
+          "expr": "avg(airgap_component_health_score{org=~\"$org\", kind=~\"$kind\"})",
+          "legendFormat": "Avg Health"
         }
-      ],
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "max": 100,
-          "min": 0,
+          "color": { "mode": "thresholds" },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               { "color": "green", "value": null },
-              { "color": "yellow", "value": 40 },
-              { "color": "red", "value": 75 }
+              { "color": "orange", "value": 30 },
+              { "color": "red", "value": 60 }
             ]
           },
           "unit": "percent"
-        },
-        "overrides": []
-      }
+        }
+      },
+      "gridPos": { "h": 4, "w": 8, "x": 8, "y": 1 },
+      "id": 2,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "title": "Max Predictive Risk Score",
+      "type": "gauge",
+      "targets": [
+        {
+          "expr": "max(airgap_component_risk_score{org=~\"$org\", kind=~\"$kind\"})",
+          "legendFormat": "Max Risk"
+        }
+      ]
     },
     {
-      "collapsed": false,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 12,
-        "y": 0
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        }
       },
+      "gridPos": { "h": 4, "w": 8, "x": 16, "y": 1 },
       "id": 3,
-      "title": "Minimum Time-To-Impact (TTI Lead Time)",
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "title": "Active Predictive Alerts Count",
       "type": "stat",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "min(airgap_time_to_impact_minutes)",
-          "instant": true,
-          "legendFormat": "TTI Lead Time",
-          "refId": "A"
+          "expr": "count(airgap_component_risk_score{org=~\"$org\", kind=~\"$kind\"} > 50) or vector(0)",
+          "legendFormat": "Elevated Alerts"
         }
-      ],
+      ]
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 200,
+      "title": "🛡️ CONTROL PLANE / ADMIN SERVERS (org-*-admin-*)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 6 },
+      "id": 10,
+      "title": "Admin Control Plane Servers - Bandwidth Utilization %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_interface_utilization_pct{component=~\".*admin.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} ({{org}})"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 6 },
+      "id": 11,
+      "title": "Admin Control Plane Servers - Predictive Risk %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_component_risk_score{component=~\".*admin.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Risk %"
+        }
+      ]
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 12 },
+      "id": 300,
+      "title": "⚙️ COMPUTE / WORKLOAD SERVERS (org-*-worker-*)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 13 },
+      "id": 20,
+      "title": "Workload Compute Servers - Bandwidth Utilization %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_interface_utilization_pct{component=~\".*worker.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} ({{org}})"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 13 },
+      "id": 21,
+      "title": "Workload Compute Servers - Latency (ms) & Packet Loss %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_latency_ms{component=~\".*worker.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Latency (ms)"
+        },
+        {
+          "expr": "airgap_packet_loss_pct{component=~\".*worker.*\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Packet Loss %"
+        }
+      ]
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 19 },
+      "id": 400,
+      "title": "🌐 EDGE ROUTERS & CIDR SUBNETS",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 20 },
+      "id": 30,
+      "title": "Edge Routers - Bandwidth & Route Flaps",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_interface_utilization_pct{kind=\"router\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Utilization %"
+        },
+        {
+          "expr": "airgap_bgp_flap_count{kind=\"router\", org=~\"$org\"}",
+          "legendFormat": "{{component}} BGP Flaps"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 20 },
+      "id": 31,
+      "title": "CIDR Subnets - Health Score & Risk %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_component_health_score{kind=\"subnet\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Health Score"
+        },
+        {
+          "expr": "airgap_component_risk_score{kind=\"subnet\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Risk %"
+        }
+      ]
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
+      "id": 500,
+      "title": "🔀 TOR SWITCHES & INFRASTRUCTURE RACKS",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 27 },
+      "id": 40,
+      "title": "Top-of-Rack (TOR) Switches - Interface Utilization %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_interface_utilization_pct{kind=\"tor\", org=~\"$org\"}",
+          "legendFormat": "{{component}} ({{org}})"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 27 },
+      "id": 41,
+      "title": "Infrastructure Racks - Health Score & Risk %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "airgap_component_health_score{kind=\"rack\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Health"
+        },
+        {
+          "expr": "airgap_component_risk_score{kind=\"rack\", org=~\"$org\"}",
+          "legendFormat": "{{component}} Risk %"
+        }
+      ]
+    },
+
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 33 },
+      "id": 600,
+      "title": "⌛ PREDICTIVE TIME-TO-IMPACT (TTI) LEAD TIME FORECASTS",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": { "mode": "thresholds" },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               { "color": "red", "value": null },
-              { "color": "yellow", "value": 5 },
+              { "color": "orange", "value": 5 },
               { "color": "green", "value": 15 }
             ]
           },
           "unit": "m"
-        },
-        "overrides": []
-      }
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 0
+        }
       },
-      "id": 4,
-      "title": "Total BGP Route Flaps",
+      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 34 },
+      "id": 50,
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "title": "Predicted Lead Time (TTI Mins) Before SLA Breach",
       "type": "stat",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "sum(airgap_bgp_flap_count)",
-          "instant": true,
-          "legendFormat": "Flap Count",
-          "refId": "A"
+          "expr": "airgap_time_to_impact_minutes{org=~\"$org\", kind=~\"$kind\"}",
+          "legendFormat": "{{component}} TTI"
         }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 5 },
-              { "color": "red", "value": 20 }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      }
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 4
-      },
-      "id": 5,
-      "title": "Interface Bandwidth Utilization (%)",
-      "type": "timeseries",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "airgap_interface_utilization_pct",
-          "legendFormat": "{{component}} ({{kind}})",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 2
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      }
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 4
-      },
-      "id": 6,
-      "title": "Component Latency Drift (ms)",
-      "type": "timeseries",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "airgap_latency_ms",
-          "legendFormat": "{{component}} (ms)",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "lineWidth": 2
-          },
-          "unit": "ms"
-        },
-        "overrides": []
-      }
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 12
-      },
-      "id": 7,
-      "title": "Live AirGap Infrastructure Metric Matrix",
-      "type": "table",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "Prometheus-AirGap"
-          },
-          "editorMode": "code",
-          "expr": "airgap_component_risk_score",
-          "instant": true,
-          "legendFormat": "{{component}}",
-          "refId": "A"
-        }
-      ],
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          }
-        },
-        "overrides": []
-      }
+      ]
     }
   ],
-  "refresh": "2s",
+  "refresh": "5s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": ["airgap", "noc", "ai-copilot", "prometheus"],
-  "time": {
-    "from": "now-15m",
-    "to": "now"
+  "tags": ["airgap", "noc", "copilot", "predictive", "telemetry"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": true, "text": "All", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+        "definition": "label_values(airgap_component_health_score, org)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "org",
+        "options": [],
+        "query": {
+          "query": "label_values(airgap_component_health_score, org)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": { "selected": true, "text": "All", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+        "definition": "label_values(airgap_component_health_score, kind)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": true,
+        "name": "kind",
+        "options": [],
+        "query": {
+          "query": "label_values(airgap_component_health_score, kind)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
   },
+  "time": { "from": "now-15m", "to": "now" },
   "timepicker": {
-    "refresh_intervals": ["2s", "5s", "10s"]
+    "refresh_intervals": ["5s", "10s", "30s", "1m"]
   },
+  "timezone": "browser",
   "title": "AirGap Autonomous AI NOC Copilot Dashboard",
   "uid": "airgap-noc-copilot",
-  "version": 1
+  "version": 2
 }
