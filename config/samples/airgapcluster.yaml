@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: AirGapCluster
+metadata:
+  name: airgapcluster-sample
+spec:
+  description: example AirGapCluster
+  enabled: true

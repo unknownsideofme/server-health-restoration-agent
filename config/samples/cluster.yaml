@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Cluster
+metadata:
+  name: cluster-sample
+spec:
+  description: example Cluster
+  enabled: true

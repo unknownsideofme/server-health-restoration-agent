@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: NodePool
+metadata:
+  name: nodepool-sample
+spec:
+  description: example NodePool
+  enabled: true

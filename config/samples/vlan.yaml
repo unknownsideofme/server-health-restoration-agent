@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: VLAN
+metadata:
+  name: vlan-sample
+spec:
+  description: example VLAN
+  enabled: true

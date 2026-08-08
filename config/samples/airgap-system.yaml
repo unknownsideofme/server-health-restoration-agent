@@ -1,0 +1,71 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Cluster
+metadata:
+  name: secure-airgap
+spec:
+  description: Air-gap operations cluster
+  enabled: true
+  type: core
+  address: 10.10.10.10
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: restricted-net
+spec:
+  description: Restricted production network
+  enabled: true
+  networkRef: secure-airgap
+  cidr: 10.20.0.0/24
+  type: bridge
+  address: 10.20.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Router
+metadata:
+  name: edge-router
+spec:
+  description: Permit-listed egress router
+  enabled: true
+  networkRef: restricted-net
+  address: 10.20.0.2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: registry
+spec:
+  description: Internal package registry
+  enabled: true
+  networkRef: restricted-net
+  address: 10.20.0.3
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Link
+metadata:
+  name: router-to-registry
+spec:
+  description: Direct private link between router and registry
+  enabled: true
+  networkRef: restricted-net
+  address: 10.20.0.4
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Service
+metadata:
+  name: package-registry
+spec:
+  description: Internal software distribution service
+  enabled: true
+  networkRef: restricted-net
+  address: 10.20.0.5
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: FirewallPolicy
+metadata:
+  name: allow-only-internal
+spec:
+  description: Permit internal-only traffic
+  enabled: true
+  networkRef: restricted-net
+  address: 10.20.0.254

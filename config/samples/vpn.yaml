@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: VPN
+metadata:
+  name: vpn-sample
+spec:
+  description: example VPN
+  enabled: true

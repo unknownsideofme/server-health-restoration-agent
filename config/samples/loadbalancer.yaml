@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: LoadBalancer
+metadata:
+  name: loadbalancer-sample
+spec:
+  description: example LoadBalancer
+  enabled: true

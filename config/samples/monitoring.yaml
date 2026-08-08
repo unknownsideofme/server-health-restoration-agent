@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Monitoring
+metadata:
+  name: monitoring-sample
+spec:
+  description: example Monitoring
+  enabled: true

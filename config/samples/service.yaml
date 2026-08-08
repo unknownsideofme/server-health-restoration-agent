@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Service
+metadata:
+  name: service-sample
+spec:
+  description: example Service
+  enabled: true

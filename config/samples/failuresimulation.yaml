@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: FailureSimulation
+metadata:
+  name: failuresimulation-sample
+spec:
+  description: example FailureSimulation
+  enabled: true

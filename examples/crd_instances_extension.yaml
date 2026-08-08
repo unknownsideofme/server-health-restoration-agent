@@ -1,0 +1,21 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Dashboard
+metadata:
+  name: airgap-noc-dashboard
+spec:
+  title: "AirGap Autonomous AI NOC Copilot Dashboard"
+  port: 8085
+  url: "http://18.60.60.152:8085"
+  framework: "React 18"
+  enabled: true
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: LLMModel
+metadata:
+  name: airgap-noc-llm-qwen
+spec:
+  modelName: "qwen2.5:0.5b"
+  provider: "Ollama Local Engine"
+  endpoint: "http://127.0.0.1:11435"
+  port: 11435
+  airgapped: true

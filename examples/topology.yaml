@@ -1,0 +1,611 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Org
+metadata:
+  name: org-a
+spec:
+  displayName: Org A
+  description: Secure production fleet for org-a
+  contact: ops-a@example.com
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Rack
+metadata:
+  name: rack-a1
+spec:
+  orgRef: org-a
+  location: dc-1
+  row: row-1
+  floor: floor-1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Tor
+metadata:
+  name: tor-a1
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  managementIP: 10.10.0.10
+  model: QFX5120
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Subnet
+metadata:
+  name: subnet-org-a-prod
+spec:
+  orgRef: org-a
+  cidr: 10.10.0.0/24
+  gateway: 10.10.0.1
+  vlan: 100
+  dnsServers:
+    - 10.10.0.53
+    - 10.10.0.54
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: org-a-prod-net
+spec:
+  description: Production network for org-a
+  enabled: true
+  networkRef: org-a
+  cidr: 10.10.0.0/24
+  type: bridge
+  address: 10.10.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Router
+metadata:
+  name: org-a-edge-router
+spec:
+  description: Egress router for org-a production subnet
+  enabled: true
+  networkRef: org-a-prod-net
+  cidr: 10.10.0.0/24
+  type: edge
+  address: 10.10.0.2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: RouteTable
+metadata:
+  name: org-a-routes
+spec:
+  description: Route table for org-a workers and admin nodes
+  enabled: true
+  networkRef: org-a-prod-net
+  cidr: 10.10.0.0/24
+  type: main
+  address: 10.10.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-a-admin-01
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  torRef: tor-a1
+  subnetRef: subnet-org-a-prod
+  hostname: org-a-admin-01.airgap.local
+  role: admin
+  ipAddress: 10.10.0.11
+  os: Ubuntu 22.04
+  serialNumber: SN-A-001
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-a-admin-02
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  torRef: tor-a1
+  subnetRef: subnet-org-a-prod
+  hostname: org-a-admin-02.airgap.local
+  role: admin
+  ipAddress: 10.10.0.12
+  os: Ubuntu 22.04
+  serialNumber: SN-A-002
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-a-admin-03
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  torRef: tor-a1
+  subnetRef: subnet-org-a-prod
+  hostname: org-a-admin-03.airgap.local
+  role: admin
+  ipAddress: 10.10.0.13
+  os: Ubuntu 22.04
+  serialNumber: SN-A-003
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-a-worker-01
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  torRef: tor-a1
+  subnetRef: subnet-org-a-prod
+  hostname: org-a-worker-01.airgap.local
+  role: worker
+  ipAddress: 10.10.0.14
+  os: Ubuntu 22.04
+  serialNumber: SN-A-101
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-a-worker-02
+spec:
+  orgRef: org-a
+  rackRef: rack-a1
+  torRef: tor-a1
+  subnetRef: subnet-org-a-prod
+  hostname: org-a-worker-02.airgap.local
+  role: worker
+  ipAddress: 10.10.0.15
+  os: Ubuntu 22.04
+  serialNumber: SN-A-102
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Org
+metadata:
+  name: org-b
+spec:
+  displayName: Org B
+  description: Secure production fleet for org-b
+  contact: ops-b@example.com
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Rack
+metadata:
+  name: rack-b1
+spec:
+  orgRef: org-b
+  location: dc-1
+  row: row-2
+  floor: floor-1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Tor
+metadata:
+  name: tor-b1
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  managementIP: 10.11.0.10
+  model: QFX5120
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Subnet
+metadata:
+  name: subnet-org-b-prod
+spec:
+  orgRef: org-b
+  cidr: 10.11.0.0/24
+  gateway: 10.11.0.1
+  vlan: 101
+  dnsServers:
+    - 10.11.0.53
+    - 10.11.0.54
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: org-b-prod-net
+spec:
+  description: Production network for org-b
+  enabled: true
+  networkRef: org-b
+  cidr: 10.11.0.0/24
+  type: bridge
+  address: 10.11.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Router
+metadata:
+  name: org-b-edge-router
+spec:
+  description: Egress router for org-b production subnet
+  enabled: true
+  networkRef: org-b-prod-net
+  cidr: 10.11.0.0/24
+  type: edge
+  address: 10.11.0.2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: RouteTable
+metadata:
+  name: org-b-routes
+spec:
+  description: Route table for org-b workers and admin nodes
+  enabled: true
+  networkRef: org-b-prod-net
+  cidr: 10.11.0.0/24
+  type: main
+  address: 10.11.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-b-admin-01
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  torRef: tor-b1
+  subnetRef: subnet-org-b-prod
+  hostname: org-b-admin-01.airgap.local
+  role: admin
+  ipAddress: 10.11.0.11
+  os: Ubuntu 22.04
+  serialNumber: SN-B-001
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-b-admin-02
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  torRef: tor-b1
+  subnetRef: subnet-org-b-prod
+  hostname: org-b-admin-02.airgap.local
+  role: admin
+  ipAddress: 10.11.0.12
+  os: Ubuntu 22.04
+  serialNumber: SN-B-002
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-b-admin-03
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  torRef: tor-b1
+  subnetRef: subnet-org-b-prod
+  hostname: org-b-admin-03.airgap.local
+  role: admin
+  ipAddress: 10.11.0.13
+  os: Ubuntu 22.04
+  serialNumber: SN-B-003
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-b-worker-01
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  torRef: tor-b1
+  subnetRef: subnet-org-b-prod
+  hostname: org-b-worker-01.airgap.local
+  role: worker
+  ipAddress: 10.11.0.14
+  os: Ubuntu 22.04
+  serialNumber: SN-B-101
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-b-worker-02
+spec:
+  orgRef: org-b
+  rackRef: rack-b1
+  torRef: tor-b1
+  subnetRef: subnet-org-b-prod
+  hostname: org-b-worker-02.airgap.local
+  role: worker
+  ipAddress: 10.11.0.15
+  os: Ubuntu 22.04
+  serialNumber: SN-B-102
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Org
+metadata:
+  name: org-c
+spec:
+  displayName: Org C
+  description: Secure production fleet for org-c
+  contact: ops-c@example.com
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Rack
+metadata:
+  name: rack-c1
+spec:
+  orgRef: org-c
+  location: dc-2
+  row: row-1
+  floor: floor-2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Tor
+metadata:
+  name: tor-c1
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  managementIP: 10.12.0.10
+  model: QFX5120
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Subnet
+metadata:
+  name: subnet-org-c-prod
+spec:
+  orgRef: org-c
+  cidr: 10.12.0.0/24
+  gateway: 10.12.0.1
+  vlan: 102
+  dnsServers:
+    - 10.12.0.53
+    - 10.12.0.54
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: org-c-prod-net
+spec:
+  description: Production network for org-c
+  enabled: true
+  networkRef: org-c
+  cidr: 10.12.0.0/24
+  type: bridge
+  address: 10.12.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Router
+metadata:
+  name: org-c-edge-router
+spec:
+  description: Egress router for org-c production subnet
+  enabled: true
+  networkRef: org-c-prod-net
+  cidr: 10.12.0.0/24
+  type: edge
+  address: 10.12.0.2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: RouteTable
+metadata:
+  name: org-c-routes
+spec:
+  description: Route table for org-c workers and admin nodes
+  enabled: true
+  networkRef: org-c-prod-net
+  cidr: 10.12.0.0/24
+  type: main
+  address: 10.12.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-c-admin-01
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  torRef: tor-c1
+  subnetRef: subnet-org-c-prod
+  hostname: org-c-admin-01.airgap.local
+  role: admin
+  ipAddress: 10.12.0.11
+  os: Ubuntu 22.04
+  serialNumber: SN-C-001
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-c-admin-02
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  torRef: tor-c1
+  subnetRef: subnet-org-c-prod
+  hostname: org-c-admin-02.airgap.local
+  role: admin
+  ipAddress: 10.12.0.12
+  os: Ubuntu 22.04
+  serialNumber: SN-C-002
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-c-admin-03
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  torRef: tor-c1
+  subnetRef: subnet-org-c-prod
+  hostname: org-c-admin-03.airgap.local
+  role: admin
+  ipAddress: 10.12.0.13
+  os: Ubuntu 22.04
+  serialNumber: SN-C-003
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-c-worker-01
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  torRef: tor-c1
+  subnetRef: subnet-org-c-prod
+  hostname: org-c-worker-01.airgap.local
+  role: worker
+  ipAddress: 10.12.0.14
+  os: Ubuntu 22.04
+  serialNumber: SN-C-101
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-c-worker-02
+spec:
+  orgRef: org-c
+  rackRef: rack-c1
+  torRef: tor-c1
+  subnetRef: subnet-org-c-prod
+  hostname: org-c-worker-02.airgap.local
+  role: worker
+  ipAddress: 10.12.0.15
+  os: Ubuntu 22.04
+  serialNumber: SN-C-102
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Org
+metadata:
+  name: org-d
+spec:
+  displayName: Org D
+  description: Secure production fleet for org-d
+  contact: ops-d@example.com
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Rack
+metadata:
+  name: rack-d1
+spec:
+  orgRef: org-d
+  location: dc-2
+  row: row-2
+  floor: floor-2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Tor
+metadata:
+  name: tor-d1
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  managementIP: 10.13.0.10
+  model: QFX5120
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Subnet
+metadata:
+  name: subnet-org-d-prod
+spec:
+  orgRef: org-d
+  cidr: 10.13.0.0/24
+  gateway: 10.13.0.1
+  vlan: 103
+  dnsServers:
+    - 10.13.0.53
+    - 10.13.0.54
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: org-d-prod-net
+spec:
+  description: Production network for org-d
+  enabled: true
+  networkRef: org-d
+  cidr: 10.13.0.0/24
+  type: bridge
+  address: 10.13.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Router
+metadata:
+  name: org-d-edge-router
+spec:
+  description: Egress router for org-d production subnet
+  enabled: true
+  networkRef: org-d-prod-net
+  cidr: 10.13.0.0/24
+  type: edge
+  address: 10.13.0.2
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: RouteTable
+metadata:
+  name: org-d-routes
+spec:
+  description: Route table for org-d workers and admin nodes
+  enabled: true
+  networkRef: org-d-prod-net
+  cidr: 10.13.0.0/24
+  type: main
+  address: 10.13.0.1
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-d-admin-01
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  torRef: tor-d1
+  subnetRef: subnet-org-d-prod
+  hostname: org-d-admin-01.airgap.local
+  role: admin
+  ipAddress: 10.13.0.11
+  os: Ubuntu 22.04
+  serialNumber: SN-D-001
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-d-admin-02
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  torRef: tor-d1
+  subnetRef: subnet-org-d-prod
+  hostname: org-d-admin-02.airgap.local
+  role: admin
+  ipAddress: 10.13.0.12
+  os: Ubuntu 22.04
+  serialNumber: SN-D-002
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-d-admin-03
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  torRef: tor-d1
+  subnetRef: subnet-org-d-prod
+  hostname: org-d-admin-03.airgap.local
+  role: admin
+  ipAddress: 10.13.0.13
+  os: Ubuntu 22.04
+  serialNumber: SN-D-003
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-d-worker-01
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  torRef: tor-d1
+  subnetRef: subnet-org-d-prod
+  hostname: org-d-worker-01.airgap.local
+  role: worker
+  ipAddress: 10.13.0.14
+  os: Ubuntu 22.04
+  serialNumber: SN-D-101
+---
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: org-d-worker-02
+spec:
+  orgRef: org-d
+  rackRef: rack-d1
+  torRef: tor-d1
+  subnetRef: subnet-org-d-prod
+  hostname: org-d-worker-02.airgap.local
+  role: worker
+  ipAddress: 10.13.0.15
+  os: Ubuntu 22.04
+  serialNumber: SN-D-102

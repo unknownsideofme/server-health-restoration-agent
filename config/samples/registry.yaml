@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Registry
+metadata:
+  name: registry-sample
+spec:
+  description: example Registry
+  enabled: true

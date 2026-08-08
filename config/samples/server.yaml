@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Server
+metadata:
+  name: server-sample
+spec:
+  description: example Server
+  enabled: true

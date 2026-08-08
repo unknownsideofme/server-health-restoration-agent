@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: NAT
+metadata:
+  name: nat-sample
+spec:
+  description: example NAT
+  enabled: true

@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Storage
+metadata:
+  name: storage-sample
+spec:
+  description: example Storage
+  enabled: true

@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Link
+metadata:
+  name: link-sample
+spec:
+  description: example Link
+  enabled: true

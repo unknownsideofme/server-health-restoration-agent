@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: InternetGateway
+metadata:
+  name: internetgateway-sample
+spec:
+  description: example InternetGateway
+  enabled: true

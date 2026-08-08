@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: SecurityGroup
+metadata:
+  name: securitygroup-sample
+spec:
+  description: example SecurityGroup
+  enabled: true

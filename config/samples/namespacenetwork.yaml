@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: NamespaceNetwork
+metadata:
+  name: namespacenetwork-sample
+spec:
+  description: example NamespaceNetwork
+  enabled: true

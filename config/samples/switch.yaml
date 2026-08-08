@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Switch
+metadata:
+  name: switch-sample
+spec:
+  description: example Switch
+  enabled: true

@@ -1,0 +1,88 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: subnets.airgap.example.com
+spec:
+  group: airgap.example.com
+  scope: Cluster
+  names:
+    plural: subnets
+    singular: subnet
+    kind: Subnet
+    shortNames: ["sub"]
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+      - name: Org
+        type: string
+        jsonPath: .spec.orgRef
+      - name: CIDR
+        type: string
+        jsonPath: .spec.cidr
+      - name: Gateway
+        type: string
+        jsonPath: .spec.gateway
+      - name: Phase
+        type: string
+        jsonPath: .status.phase
+      - name: Ready
+        type: boolean
+        jsonPath: .status.ready
+      - name: Age
+        type: date
+        jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: ["orgRef", "cidr", "gateway", "vlan"]
+              properties:
+                orgRef:
+                  type: string
+                cidr:
+                  type: string
+                gateway:
+                  type: string
+                vlan:
+                  type: integer
+                dnsServers:
+                  type: array
+                  items:
+                    type: string
+            status:
+              type: object
+              properties:
+                ready:
+                  type: boolean
+                phase:
+                  type: string
+                observedGeneration:
+                  type: integer
+                networkAddress:
+                  type: string
+                broadcastAddress:
+                  type: string
+                usableRange:
+                  type: string
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      reason:
+                        type: string
+                      message:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time

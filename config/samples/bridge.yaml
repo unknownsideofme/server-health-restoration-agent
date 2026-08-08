@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Bridge
+metadata:
+  name: bridge-sample
+spec:
+  description: example Bridge
+  enabled: true

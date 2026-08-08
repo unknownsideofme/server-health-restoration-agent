@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Network
+metadata:
+  name: network-sample
+spec:
+  description: example Network
+  enabled: true

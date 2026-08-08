@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Firewall
+metadata:
+  name: firewall-sample
+spec:
+  description: example Firewall
+  enabled: true

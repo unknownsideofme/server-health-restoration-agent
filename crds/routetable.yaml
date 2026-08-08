@@ -1,0 +1,82 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: routetables.airgap.example.com
+spec:
+  group: airgap.example.com
+  names:
+    kind: RouteTable
+    plural: routetables
+    singular: routetable
+    shortNames:
+    - rot
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              description:
+                type: string
+              enabled:
+                type: boolean
+              networkRef:
+                type: string
+              cidr:
+                type: string
+              type:
+                type: string
+              address:
+                type: string
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            type: object
+            properties:
+              phase:
+                type: string
+              ready:
+                type: boolean
+              observedGeneration:
+                type: integer
+              lastLifecycleUpdate:
+                type: string
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    status:
+                      type: string
+                    reason:
+                      type: string
+                    message:
+                      type: string
+                    lastTransitionTime:
+                      type: string
+                      format: date-time
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: NetworkRef
+      type: string
+      jsonPath: .spec.networkRef
+    - name: CIDR
+      type: string
+      jsonPath: .spec.cidr
+    - name: Phase
+      type: string
+      jsonPath: .status.phase
+    - name: Ready
+      type: boolean
+      jsonPath: .status.ready
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp

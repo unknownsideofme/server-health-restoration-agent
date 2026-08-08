@@ -1,0 +1,7 @@
+apiVersion: airgap.example.com/v1alpha1
+kind: Route
+metadata:
+  name: route-sample
+spec:
+  description: example Route
+  enabled: true
