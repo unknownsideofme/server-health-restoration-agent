@@ -2,9 +2,7 @@ name: AirGap Unit Tests Pipeline (ut)
 
 on:
   push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
 
 jobs:
   run-unit-tests-ut:
