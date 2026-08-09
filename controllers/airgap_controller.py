@@ -16,10 +16,12 @@ updates etcd CRD phase (Ready/Degraded/Critical), and emits structured Kubernete
 """
 
 import ipaddress
+import json
 import logging
 import os
 import sys
 import time
+import urllib.request
 from datetime import datetime, timezone
 
 from kubernetes import client, config
@@ -107,15 +109,50 @@ def update_status(api: client.CustomObjectsApi, plural: str, name: str, status: 
         logger.error(f"Failed to update status for {plural}/{name}: {exc}")
 
 
+TELEMETRY_API_URL = "http://127.0.0.1:8085/api/telemetry"
+cached_telemetry = {}
+last_cache_time = 0
+
+
+def get_remote_telemetry() -> dict:
+    global cached_telemetry, last_cache_time
+    now = time.time()
+    if now - last_cache_time < 3 and cached_telemetry:
+        return cached_telemetry
+    try:
+        req = urllib.request.Request(TELEMETRY_API_URL, method="GET")
+        with urllib.request.urlopen(req, timeout=1) as response:
+            if response.status == 200:
+                data = json.loads(response.read().decode("utf-8"))
+                telemetry_map = {}
+                for comp in data.get("topology", []):
+                    telemetry_map[comp["name"]] = comp
+                cached_telemetry = telemetry_map
+                last_cache_time = now
+                return cached_telemetry
+    except Exception:
+        pass
+    return cached_telemetry
+
+
 def enrich_status_and_emit_event(plural: str, name: str, kind: str, base_status: dict) -> dict:
     """Enrich CRD status with live predictive telemetry and emit Kubernetes Event for k9s."""
-    analysis = predictive_engine.analyze_component(name, kind)
-
-    telemetry_status = analysis.get("status", "HEALTHY")
-    health_score = analysis.get("health_score", 98.0)
-    risk_score = analysis.get("risk_score", 15.0)
-    tti_minutes = analysis.get("tti_minutes")
-    alerts = analysis.get("alerts", [])
+    remote_data = get_remote_telemetry()
+    
+    if remote_data and name in remote_data:
+        analysis = remote_data[name]
+        telemetry_status = analysis.get("status", "HEALTHY")
+        health_score = analysis.get("current_metrics", {}).get("health_score", 98.0)
+        risk_score = analysis.get("risk_score", 15.0)
+        tti_minutes = analysis.get("tti_minutes")
+        alerts = analysis.get("alerts", [])
+    else:
+        analysis = predictive_engine.analyze_component(name, kind)
+        telemetry_status = analysis.get("status", "HEALTHY")
+        health_score = analysis.get("health_score", 98.0)
+        risk_score = analysis.get("risk_score", 15.0)
+        tti_minutes = analysis.get("tti_minutes")
+        alerts = analysis.get("alerts", [])
 
     if telemetry_status == "CRITICAL":
         base_status["ready"] = False
