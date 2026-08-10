@@ -23,9 +23,9 @@ class TelemetryPipeline:
         self.history_capacity = history_capacity
         self.history: Dict[str, deque] = {}
 
-    def collect_snapshot(self, component_name: str, kind: str = "server") -> dict:
+    def collect_snapshot(self, component_name: str, kind: str = "server", timestamp: float = None) -> dict:
         """Collect a single normalized telemetry snapshot for a component."""
-        now = time.time()
+        now = timestamp if timestamp is not None else time.time()
         active_faults = self.injector.get_active_faults()
         fault = active_faults.get(component_name)
 
