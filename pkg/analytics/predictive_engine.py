@@ -23,9 +23,12 @@ class PredictiveAnalyticsEngine:
         history = self.pipeline.get_history(component_name)
 
         if len(history) < 3:
-            for _ in range(4 - len(history)):
-                time.sleep(0.05)
-                self.pipeline.collect_snapshot(component_name, kind)
+            now = time.time()
+            if component_name in self.pipeline.history:
+                self.pipeline.history[component_name].clear()
+            for i in range(4):
+                ts = now - (3 - i) * 60.0
+                snapshot = self.pipeline.collect_snapshot(component_name, kind, timestamp=ts)
             history = self.pipeline.get_history(component_name)
 
         # Extract metric arrays
