@@ -85,7 +85,7 @@ for doc in docs:
     startup_script = (
         bin_helpers +
         f"hostname {name} 2>/dev/null || true; "
-        f"(apt-get update -qq && apt-get install -y -qq openssh-server iproute2 iputils-ping net-tools curl traceroute iperf3 nmap && "
+        f"(apt-get update -qq && apt-get install -y -qq openssh-server iproute2 iputils-ping net-tools curl traceroute iperf3 nmap iptables && "
         f"mkdir -p /var/run/sshd && echo 'root:airgap' | chpasswd && "
         f"sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && "
         f"sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && "

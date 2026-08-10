@@ -22,15 +22,15 @@ class RouterRepairSkill:
         logger.info(f"Executing RouterRepairSkill (QoS Shaping) on {target_component}...")
         actions = []
 
-        # 1. Apply traffic policing inside container
+        # 1. Clear injected congestion fault if present (clears the tbf rate limiter)
+        injector = FaultInjector()
+        injector.clear_faults(target_component)
+        actions.append(f"Cleared active fault state and associated rate limits for {target_component}.")
+
+        # 2. Apply FQ-CoDel traffic policing inside container
         cmd = f"kubectl exec -i {target_component} -- tc qdisc replace dev eth0 root fq_codel 2>/dev/null || true"
         subprocess.run(cmd, shell=True, capture_output=True)
         actions.append(f"Applied FQ-CoDel active queue management (AQM) on egress interface of {target_component}.")
-
-        # 2. Clear injected congestion fault if present
-        injector = FaultInjector()
-        injector.clear_faults(target_component)
-        actions.append(f"Cleared active fault state for {target_component}.")
 
         return {
             "status": "SUCCESS",

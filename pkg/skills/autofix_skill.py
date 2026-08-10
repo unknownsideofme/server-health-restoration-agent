@@ -21,7 +21,15 @@ class AutoFixSkill:
         """Automatically execute the appropriate MCP repair skill for a component."""
         logger.info(f"Executing AutoFixSkill for component '{component_name}' (Issue: {issue_type})...")
 
-        if "CONGESTION" in issue_type or "SATURATION" in issue_type or issue_type == "AUTO_DETECT":
+        if issue_type == "AUTO_DETECT":
+            from pkg.faults.fault_injector import FaultInjector
+            injector = FaultInjector()
+            active = injector.get_active_faults()
+            if component_name in active:
+                issue_type = active[component_name]["type"]
+                logger.info(f"Auto-detected active fault type '{issue_type}' for component '{component_name}'")
+
+        if "CONGESTION" in issue_type or "SATURATION" in issue_type:
             res = RouterRepairSkill.remediate_router_congestion(component_name)
         elif "FLAP" in issue_type or "ROUTING" in issue_type:
             res = RouterRepairSkill.remediate_bgp_flap(component_name)
