@@ -60,8 +60,8 @@
       "bypass_mode": "always"
     },
     {
-      "actor_id": 1,
-      "actor_type": "OrganizationAdmin",
+      "actor_id": 164716888,
+      "actor_type": "User",
       "bypass_mode": "always"
     }
   ]
