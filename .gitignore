@@ -44,3 +44,8 @@ Thumbs.db
 *.gguf
 models/
 data/*.sqlite
+
+# Node.js
+lucid/frontend/node_modules/
+lucid/backend/node_modules/
+lucid/frontend/dist/

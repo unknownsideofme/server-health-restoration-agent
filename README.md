@@ -55,7 +55,7 @@ The **AirGap Autonomous AI NOC Copilot** is a production-grade, 100% offline-rea
      - `router_repair_skill.py`: BGP route flap damping, MTU mismatch fix, tunnel QoS shaping.
      - `autofix_skill.py`: Autonomous self-healing execution pipeline.
 
-3. **React 18 Multi-Page Tabbed UI Dashboard (`ui/index.html`)**:
+3. **React 18 Multi-Page Tabbed UI Dashboard (`lucid/frontend/src/App.jsx`)**:
    - Built using **React 18** and **Babel**.
    - Tabbed navigation: `📊 Global Overview`, `🏢 Organizations`, `🖥️ Control Plane & Workloads`, `🔀 TOR Switches`, `🗄️ Infrastructure Racks`, `🌐 Edge Routers`.
    - Scope filter dropdown (`ALL`, `Org A`, `Org B`, `Org C`, `Org D`).
@@ -157,7 +157,7 @@ nohup python3 pkg/copilot/llm_daemon.py > /tmp/llm_daemon.log 2>&1 &
 
 #### 2. Start the NOC Copilot Web Dashboard Server (Port 8085):
 ```bash
-nohup python3 ui/server.py > /tmp/ui_server.log 2>&1 &
+cd lucid/backend && nohup npm start > /tmp/ui_server.log 2>&1 &
 ```
 
 #### 3. Start the Universal 10-Resource Kubernetes Operator Controller:
