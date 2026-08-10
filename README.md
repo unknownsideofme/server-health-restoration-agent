@@ -56,7 +56,7 @@ The **AirGap Autonomous AI NOC Copilot** is a production-grade, 100% offline-rea
      - `autofix_skill.py`: Autonomous self-healing execution pipeline.
 
 3. **React 18 Multi-Page Tabbed UI Dashboard (`lucid/frontend/src/App.jsx`)**:
-   - Built using **React 18** and **Babel**.
+   - Built using **React 18** (ESM) and **Vite** (bundler).
    - Tabbed navigation: `📊 Global Overview`, `🏢 Organizations`, `🖥️ Control Plane & Workloads`, `🔀 TOR Switches`, `🗄️ Infrastructure Racks`, `🌐 Edge Routers`.
    - Scope filter dropdown (`ALL`, `Org A`, `Org B`, `Org C`, `Org D`).
    - One-click **Execute Autonomous Repair (MCP Skill)** trigger.
@@ -77,7 +77,7 @@ Update your server and install required system utilities:
 
 ```bash
 sudo apt-get update && sudo apt-get install -y \
-    python3 python3-pip python3-venv git curl wget nginx openssl net-tools procps
+    python3 python3-pip python3-venv git curl wget nginx openssl net-tools procps nodejs npm
 ```
 
 ### Step 2: Install Kubernetes (k3s) & k9s
@@ -146,6 +146,22 @@ kubectl get crd
 kubectl get orgs,racks,tors,subnets,servers,networks,routers,routetables,dashboards,llmmodels
 ```
 
+### Step 5.5: Build the React Dashboard Application
+
+Navigate to the `lucid/frontend/` directory, install package dependencies, and compile the static production assets:
+
+```bash
+cd lucid/frontend
+npm install
+npm run build
+```
+
+Then install backend dependencies:
+```bash
+cd ../backend
+npm install
+```
+
 ---
 
 ### Step 6: Start All System Services & Daemons
@@ -155,9 +171,9 @@ kubectl get orgs,racks,tors,subnets,servers,networks,routers,routetables,dashboa
 nohup python3 pkg/copilot/llm_daemon.py > /tmp/llm_daemon.log 2>&1 &
 ```
 
-#### 2. Start the NOC Copilot Web Dashboard Server (Port 8085):
+#### 2. Start the NOC Copilot Web Dashboard Server (Port 8085) inside a tmux session:
 ```bash
-cd lucid/backend && nohup npm start > /tmp/ui_server.log 2>&1 &
+tmux new-session -d -s lucid 'cd lucid/backend && npm start'
 ```
 
 #### 3. Start the Universal 10-Resource Kubernetes Operator Controller:
