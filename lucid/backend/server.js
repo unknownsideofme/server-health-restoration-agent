@@ -30,12 +30,12 @@ function runBridge(action, args = []) {
 }
 
 // REST API Routes
-app.get('/api/telemetry', async (req, res) => {
+app.get('/api/state', async (req, res) => {
   try {
     const stdout = await runBridge('telemetry');
     res.json(JSON.parse(stdout));
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch telemetry', details: err.message });
+    res.status(500).json({ error: 'Failed to fetch state', details: err.message });
   }
 });
 
