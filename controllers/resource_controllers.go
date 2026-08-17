@@ -470,19 +470,6 @@ func (r *BackupPolicyReconciler) SetupWithManager(mgr ctrl.Manager) error {
     return ctrl.NewControllerManagedBy(mgr).For(&v1alpha1.BackupPolicy{}).Complete(r)
 }
 
-// FailureSimulationReconciler reconciles a FailureSimulation resource.
-type FailureSimulationReconciler struct {
-    GenericReconciler
-}
-
-func (r *FailureSimulationReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-    var resource v1alpha1.FailureSimulation
-    return r.GenericReconciler.reconcile(ctx, req, &resource, "FailureSimulation", resource.Spec.Description)
-}
-
-func (r *FailureSimulationReconciler) SetupWithManager(mgr ctrl.Manager) error {
-    return ctrl.NewControllerManagedBy(mgr).For(&v1alpha1.FailureSimulation{}).Complete(r)
-}
 
 // TrafficPolicyReconciler reconciles a TrafficPolicy resource.
 type TrafficPolicyReconciler struct {

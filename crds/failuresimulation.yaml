@@ -8,6 +8,8 @@ spec:
     kind: FailureSimulation
     plural: failuresimulations
     singular: failuresimulation
+    shortNames:
+      - fail
   scope: Cluster
   versions:
   - name: v1alpha1
