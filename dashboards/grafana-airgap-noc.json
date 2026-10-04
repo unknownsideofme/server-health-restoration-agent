@@ -17,323 +17,2823 @@
   "id": null,
   "links": [],
   "liveNow": true,
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "tags": [
+    "airgap",
+    "noc",
+    "infrastructure"
+  ],
+  "title": "AirGap Autonomous AI NOC Copilot \u2014 Full Infrastructure",
+  "uid": "airgap-noc-copilot",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
   "panels": [
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
-      "id": 100,
-      "title": "🏢 EXECUTIVE MULTI-ORG SYSTEM OVERVIEW",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1000,
+      "title": "KEY HEALTH STATS \u2014 AT A GLANCE",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "red", "value": null },
-              { "color": "orange", "value": 70 },
-              { "color": "green", "value": 90 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
             ]
           },
-          "unit": "percent"
+          "unit": "percent",
+          "mappings": []
         }
       },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
       "id": 1,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Average System Health Score",
-      "type": "gauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background"
+      },
+      "title": "CPU Usage %",
+      "type": "stat",
       "targets": [
         {
-          "expr": "avg(airgap_component_health_score{org=~\"$org\", kind=~\"$kind\"})",
-          "legendFormat": "Avg Health"
+          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode='idle'}[2m])) * 100)",
+          "legendFormat": "CPU %",
+          "refId": "A"
         }
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "orange", "value": 30 },
-              { "color": "red", "value": 60 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
             ]
           },
           "unit": "percent"
         }
       },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
       "id": 2,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Max Predictive Risk Score",
-      "type": "gauge",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Memory Usage %",
+      "type": "stat",
       "targets": [
         {
-          "expr": "max(airgap_component_risk_score{org=~\"$org\", kind=~\"$kind\"})",
-          "legendFormat": "Max Risk"
+          "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+          "legendFormat": "Memory %",
+          "refId": "A"
         }
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "blue", "value": null }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
             ]
           },
-          "unit": "reqps"
+          "unit": "percent"
         }
       },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 1 },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
       "id": 3,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Total HTTP Request Throughput (RPS)",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Disk Usage % (root)",
       "type": "stat",
       "targets": [
         {
-          "expr": "sum(airgap_http_requests_per_sec{org=~\"$org\", kind=~\"$kind\"})",
-          "legendFormat": "Total RPS"
+          "expr": "(1 - (node_filesystem_avail_bytes{mountpoint='/',fstype!='tmpfs'} / node_filesystem_size_bytes{mountpoint='/',fstype!='tmpfs'})) * 100",
+          "legendFormat": "Disk %",
+          "refId": "A"
         }
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "purple", "value": null }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
             ]
           },
-          "unit": "Bps"
+          "unit": "short"
         }
       },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 1 },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
       "id": 4,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Total Network Bandwidth Throughput",
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "System Load (1m)",
       "type": "stat",
       "targets": [
         {
-          "expr": "sum(airgap_network_traffic_bytes_sec{org=~\"$org\", kind=~\"$kind\"})",
-          "legendFormat": "Total Network Bps"
-        }
-      ]
-    },
-
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
-      "id": 200,
-      "title": "🛡️ CONTROL PLANE / ADMIN SERVERS (org-*-admin-*)",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 6 },
-      "id": 10,
-      "title": "Admin Control Plane Servers - Bandwidth Utilization %",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_interface_utilization_pct{component=~\".*admin.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} ({{org}})"
+          "expr": "node_load1",
+          "legendFormat": "Load 1m",
+          "refId": "A"
         }
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 6 },
-      "id": 11,
-      "title": "Admin Control Plane Servers - Predictive Risk %",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_component_risk_score{component=~\".*admin.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Risk %"
-        }
-      ]
-    },
-
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 12 },
-      "id": 300,
-      "title": "⚙️ COMPUTE / WORKLOAD SERVERS (org-*-worker-*)",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 13 },
-      "id": 20,
-      "title": "Workload Compute Servers - HTTP Requests/sec (RPS) & Active TCP Connections",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_http_requests_per_sec{component=~\".*worker.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} RPS"
-        },
-        {
-          "expr": "airgap_active_tcp_connections{component=~\".*worker.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Active TCP Sockets"
-        }
-      ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 13 },
-      "id": 21,
-      "title": "Workload Compute Servers - Latency (ms) & Packet Loss %",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_latency_ms{component=~\".*worker.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Latency (ms)"
-        },
-        {
-          "expr": "airgap_packet_loss_pct{component=~\".*worker.*\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Packet Loss %"
-        }
-      ]
-    },
-
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 19 },
-      "id": 400,
-      "title": "⚡ APPLICATION MICROSERVICES & APPS",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 20 },
-      "id": 60,
-      "title": "Microservices - HTTP Throughput (RPS)",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_http_requests_per_sec{kind=\"service\", org=~\"$org\"}",
-          "legendFormat": "{{component}} RPS"
-        }
-      ]
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 20 },
-      "id": 61,
-      "title": "Microservices - Error Rate % & Health Score",
-      "type": "timeseries",
-      "targets": [
-        {
-          "expr": "airgap_error_rate_pct{kind=\"service\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Error Rate %"
-        },
-        {
-          "expr": "airgap_component_health_score{kind=\"service\", org=~\"$org\"}",
-          "legendFormat": "{{component}} Health"
-        }
-      ]
-    },
-
-    {
-      "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 26 },
-      "id": 500,
-      "title": "⌛ PREDICTIVE TIME-TO-IMPACT (TTI) LEAD TIME FORECASTS",
-      "type": "row"
-    },
-    {
-      "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "thresholds" },
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "red", "value": null },
-              { "color": "orange", "value": 5 },
-              { "color": "green", "value": 15 }
+              {
+                "color": "green",
+                "value": null
+              }
             ]
           },
-          "unit": "m"
+          "unit": "bytes"
         }
       },
-      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 27 },
-      "id": 50,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] } },
-      "title": "Predicted Lead Time (TTI Mins) Before SLA Breach across 44 Components",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Free Memory",
       "type": "stat",
       "targets": [
         {
-          "expr": "airgap_time_to_impact_minutes{org=~\"$org\", kind=~\"$kind\"}",
-          "legendFormat": "{{component}} TTI"
+          "expr": "node_memory_MemAvailable_bytes",
+          "legendFormat": "Free RAM",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "System Uptime",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "time() - node_boot_time_seconds",
+          "legendFormat": "Uptime",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 1001,
+      "title": "CPU METRICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 10,
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        }
+      },
+      "title": "CPU Usage by Mode (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='user'}[2m]) * 100",
+          "legendFormat": "User",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='system'}[2m]) * 100",
+          "legendFormat": "System",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='iowait'}[2m]) * 100",
+          "legendFormat": "I/O Wait",
+          "refId": "C"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='irq'}[2m]) * 100",
+          "legendFormat": "IRQ",
+          "refId": "D"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='softirq'}[2m]) * 100",
+          "legendFormat": "SoftIRQ",
+          "refId": "E"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='steal'}[2m]) * 100",
+          "legendFormat": "Steal",
+          "refId": "F"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 11,
+      "title": "System Load Average (1m / 5m / 15m)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_load1",
+          "legendFormat": "Load 1m",
+          "refId": "A"
+        },
+        {
+          "expr": "node_load5",
+          "legendFormat": "Load 5m",
+          "refId": "B"
+        },
+        {
+          "expr": "node_load15",
+          "legendFormat": "Load 15m",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 12,
+      "title": "Context Switches & Interrupts per Second",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_context_switches_total[2m])",
+          "legendFormat": "Context Switches/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_intr_total[2m])",
+          "legendFormat": "Interrupts/s",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_forks_total[2m])",
+          "legendFormat": "Forks/s",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 13,
+      "title": "CPU Guest & Steal Time",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_cpu_guest_seconds_total{mode='user'}[2m]) * 100",
+          "legendFormat": "Guest User %",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_cpu_guest_seconds_total{mode='nice'}[2m]) * 100",
+          "legendFormat": "Guest Nice %",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_cpu_seconds_total{mode='steal'}[2m]) * 100",
+          "legendFormat": "Steal %",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 1002,
+      "title": "MEMORY METRICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 20,
+      "title": "Memory Breakdown (Total / Used / Free / Cached / Buffers)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_memory_MemTotal_bytes",
+          "legendFormat": "Total",
+          "refId": "A"
+        },
+        {
+          "expr": "node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes",
+          "legendFormat": "Used",
+          "refId": "B"
+        },
+        {
+          "expr": "node_memory_MemFree_bytes",
+          "legendFormat": "Free",
+          "refId": "C"
+        },
+        {
+          "expr": "node_memory_Cached_bytes",
+          "legendFormat": "Cached",
+          "refId": "D"
+        },
+        {
+          "expr": "node_memory_Buffers_bytes",
+          "legendFormat": "Buffers",
+          "refId": "E"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 21,
+      "title": "Virtual Memory & Swap Activity",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_memory_SwapTotal_bytes",
+          "legendFormat": "Swap Total",
+          "refId": "A"
+        },
+        {
+          "expr": "node_memory_SwapFree_bytes",
+          "legendFormat": "Swap Free",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_vmstat_pswpin[2m]) * 512",
+          "legendFormat": "Swap In (bytes/s)",
+          "refId": "C"
+        },
+        {
+          "expr": "rate(node_vmstat_pswpout[2m]) * 512",
+          "legendFormat": "Swap Out (bytes/s)",
+          "refId": "D"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 31
+      },
+      "id": 22,
+      "title": "Memory Pressure \u2014 Page Faults & OOM Kills",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_vmstat_pgfault[2m])",
+          "legendFormat": "Minor Page Faults/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_vmstat_pgmajfault[2m])",
+          "legendFormat": "Major Page Faults/s",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_vmstat_oom_kill[2m])",
+          "legendFormat": "OOM Kills/s",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 31
+      },
+      "id": 23,
+      "title": "Memory Pages In / Out",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_vmstat_pgpgin[2m])",
+          "legendFormat": "Pages In/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_vmstat_pgpgout[2m])",
+          "legendFormat": "Pages Out/s",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "id": 1003,
+      "title": "DISK & STORAGE METRICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "Bps",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 30,
+      "title": "Disk Throughput \u2014 Read / Write (bytes/s)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_disk_read_bytes_total[2m])",
+          "legendFormat": "Read {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_disk_written_bytes_total[2m])",
+          "legendFormat": "Write {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "iops",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 31,
+      "title": "Disk IOPS \u2014 Reads / Writes Completed/s",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_disk_reads_completed_total[2m])",
+          "legendFormat": "Reads/s {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_disk_writes_completed_total[2m])",
+          "legendFormat": "Writes/s {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 48
+      },
+      "id": 32,
+      "title": "Disk I/O Latency \u2014 Read / Write Time",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_disk_read_time_seconds_total[2m]) / rate(node_disk_reads_completed_total[2m])",
+          "legendFormat": "Avg Read Latency {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_disk_write_time_seconds_total[2m]) / rate(node_disk_writes_completed_total[2m])",
+          "legendFormat": "Avg Write Latency {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 48
+      },
+      "id": 33,
+      "title": "Disk I/O Utilization %",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_disk_io_time_seconds_total[2m]) * 100",
+          "legendFormat": "I/O Util % {{device}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5368709120
+              },
+              {
+                "color": "green",
+                "value": 10737418240
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 56
+      },
+      "id": 34,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "displayMode": "gradient",
+        "orientation": "horizontal"
+      },
+      "title": "Filesystem Free Space",
+      "type": "bargauge",
+      "targets": [
+        {
+          "expr": "node_filesystem_avail_bytes{fstype!~'tmpfs|devtmpfs|squashfs'}",
+          "legendFormat": "{{mountpoint}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 56
+      },
+      "id": 35,
+      "title": "Open File Descriptors",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_filefd_allocated",
+          "legendFormat": "Allocated FDs",
+          "refId": "A"
+        },
+        {
+          "expr": "node_filefd_maximum",
+          "legendFormat": "Max FDs",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 56
+      },
+      "id": 36,
+      "title": "Inodes Used vs Free",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_filesystem_files{fstype!~'tmpfs|devtmpfs|squashfs'} - node_filesystem_files_free{fstype!~'tmpfs|devtmpfs|squashfs'}",
+          "legendFormat": "Inodes Used {{mountpoint}}",
+          "refId": "A"
+        },
+        {
+          "expr": "node_filesystem_files_free{fstype!~'tmpfs|devtmpfs|squashfs'}",
+          "legendFormat": "Inodes Free {{mountpoint}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 62
+      },
+      "id": 1004,
+      "title": "NETWORK METRICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "bps",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 63
+      },
+      "id": 40,
+      "title": "Network Bandwidth \u2014 Receive / Transmit (bits/s)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total{device!='lo'}[2m]) * 8",
+          "legendFormat": "RX {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_bytes_total{device!='lo'}[2m]) * 8",
+          "legendFormat": "TX {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "pps",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 63
+      },
+      "id": 41,
+      "title": "Network Packets per Second \u2014 RX / TX",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_packets_total{device!='lo'}[2m])",
+          "legendFormat": "RX Pkts/s {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_packets_total{device!='lo'}[2m])",
+          "legendFormat": "TX Pkts/s {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 71
+      },
+      "id": 42,
+      "title": "Network Errors \u2014 RX / TX Errors per Second",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_errs_total{device!='lo'}[2m])",
+          "legendFormat": "RX Errors/s {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_errs_total{device!='lo'}[2m])",
+          "legendFormat": "TX Errors/s {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 71
+      },
+      "id": 43,
+      "title": "Network Drops per Second",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_drop_total{device!='lo'}[2m])",
+          "legendFormat": "RX Drops/s {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_drop_total{device!='lo'}[2m])",
+          "legendFormat": "TX Drops/s {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 79
+      },
+      "id": 44,
+      "title": "TCP Connections & Sockets",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_sockstat_TCP_alloc",
+          "legendFormat": "TCP Allocated",
+          "refId": "A"
+        },
+        {
+          "expr": "node_sockstat_TCP_inuse",
+          "legendFormat": "TCP In Use",
+          "refId": "B"
+        },
+        {
+          "expr": "node_sockstat_TCP_tw",
+          "legendFormat": "TCP TIME_WAIT",
+          "refId": "C"
+        },
+        {
+          "expr": "node_sockstat_sockets_used",
+          "legendFormat": "Total Sockets Used",
+          "refId": "D"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 79
+      },
+      "id": 45,
+      "title": "Network Interface Speed & ARP Entries",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_network_speed_bytes{device!='lo'}",
+          "legendFormat": "Link Speed {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "node_arp_entries{device!='lo'}",
+          "legendFormat": "ARP Entries {{device}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 1010,
+      "panels": [],
+      "title": "NETWORK FAULT & ANOMALY METRICS",
+      "type": "row"
+    },
+    {
+      "id": 1011,
+      "title": "TCP Retransmissions & SYN Retransmit Rate",
+      "description": "High retransmissions indicate packet loss or buffer saturation along network paths.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 88
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(node_netstat_Tcp_RetransSegs[2m]) / (rate(node_netstat_Tcp_OutSegs[2m]) + 0.0001) * 100",
+          "legendFormat": "Retransmit Rate %",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_netstat_TcpExt_TCPSynRetrans[2m])",
+          "legendFormat": "SYN Retransmits/s",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_netstat_TcpExt_TCPTimeouts[2m])",
+          "legendFormat": "TCP Timeouts/s",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 1012,
+      "title": "TCP Resets (RST) & Inbound Errors",
+      "description": "Spikes in TCP RST indicate rejected connections, closed ports, or abruptly dropped connections.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 88
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(node_netstat_Tcp_OutRsts[2m])",
+          "legendFormat": "Outbound TCP RSTs/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_netstat_Tcp_InErrs[2m])",
+          "legendFormat": "Inbound TCP Errors/s",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 1013,
+      "title": "Netfilter Conntrack Table Saturation %",
+      "description": "When conntrack table reaches 100%, the Linux firewall drops all new inbound and outbound connections.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 96
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) * 100",
+          "legendFormat": "Conntrack Table Saturation %",
+          "refId": "A"
+        },
+        {
+          "expr": "node_nf_conntrack_entries",
+          "legendFormat": "Active Conntrack Entries",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 1014,
+      "title": "Socket Listen Queue Overflows & Drops",
+      "description": "Occurs when application socket backlog is full and cannot accept incoming connections fast enough.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 96
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(node_netstat_TcpExt_ListenOverflows[2m])",
+          "legendFormat": "Listen Queue Overflows/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_netstat_TcpExt_ListenDrops[2m])",
+          "legendFormat": "Listen Queue Drops/s",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 1015,
+      "title": "Kernel Softnet Drops & CPU Collisions",
+      "description": "Packets discarded by Linux kernel when netdev backlog exceeds limit or softirq budget expires.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 104
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(node_softnet_dropped_total[2m])",
+          "legendFormat": "Softnet Dropped Packets/s (CPU {{cpu}})",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_softnet_times_squeezed_total[2m])",
+          "legendFormat": "Softnet Squeezed/s (CPU {{cpu}})",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(node_softnet_cpu_collision_total[2m])",
+          "legendFormat": "Softnet CPU Collisions/s (CPU {{cpu}})",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 1016,
+      "title": "Network Interface Flapping & Operational Status",
+      "description": "Monitors link state changes (carrier transitions) and operational state (1=Up, 0=Down).",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 104
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(node_network_carrier_changes_total{device!='lo'}[2m])",
+          "legendFormat": "Carrier Changes/s {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "node_network_up{device!='lo'}",
+          "legendFormat": "OperState {{device}} (1=Up, 0=Down)",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 112
+      },
+      "id": 1020,
+      "panels": [],
+      "title": "NETWORK CONGESTION, TRAFFIC & SRE RELIABILITY (MTTR / MTBF)",
+      "type": "row"
+    },
+    {
+      "id": 1021,
+      "title": "Network Congestion Index & Buffer Occupancy %",
+      "description": "Composite congestion score based on queue delays, buffer capacity, and utilization.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 113
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 14
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_network_congestion_index",
+          "legendFormat": "Congestion Index % {{component}}",
+          "refId": "A"
+        },
+        {
+          "expr": "airgap_buffer_occupancy_pct",
+          "legendFormat": "Buffer Occupancy % {{component}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 1022,
+      "title": "Live Traffic Throughput ??? Ingress / Egress (Mbps)",
+      "description": "Real-time bandwidth throughput rate and top-talker flow consumption.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 113
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "Mbps",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_traffic_ingress_mbps",
+          "legendFormat": "Ingress Mbps {{component}}",
+          "refId": "A"
+        },
+        {
+          "expr": "airgap_traffic_egress_mbps",
+          "legendFormat": "Egress Mbps {{component}}",
+          "refId": "B"
+        },
+        {
+          "expr": "airgap_top_talker_flow_mbps",
+          "legendFormat": "Top-Talker Flow Mbps {{component}}",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 1023,
+      "title": "Component Active Failure State & Queue Drop Rate",
+      "description": "Identifies active failure incidents (1=Active Failure) and congestion packet drops.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 121
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 16
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_component_failure_active",
+          "legendFormat": "Active Failure (1=Fail) {{component}}",
+          "refId": "A"
+        },
+        {
+          "expr": "airgap_queue_drop_rate_pps",
+          "legendFormat": "Queue Buffer Drops/s {{component}}",
+          "refId": "B"
+        },
+        {
+          "expr": "airgap_failure_events_total",
+          "legendFormat": "Cumulative Failures {{component}}",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 1024,
+      "title": "SRE MTTR ??? Mean Time To Recovery (Minutes)",
+      "description": "Average duration required for self-healing repair skills to restore component health.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 121
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "m",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_mttr_minutes",
+          "legendFormat": "MTTR {{component}} (min)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 1025,
+      "title": "SRE MTBF ??? Mean Time Between Failures (Hours)",
+      "description": "Mean operational run-time between consecutive failure events.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 129
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "h",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 12
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_mtbf_hours",
+          "legendFormat": "MTBF {{component}} (hours)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 1026,
+      "title": "Component Availability & Bandwidth Headroom %",
+      "description": "SRE calculated operational availability (MTBF / (MTBF + MTTR)) and remaining bandwidth headroom.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 129
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "percent",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 15
+          }
+        }
+      },
+      "targets": [
+        {
+          "expr": "airgap_component_availability_pct",
+          "legendFormat": "Availability % {{component}}",
+          "refId": "A"
+        },
+        {
+          "expr": "airgap_traffic_headroom_pct",
+          "legendFormat": "Traffic Headroom % {{component}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 137
+      },
+      "id": 1005,
+      "title": "PROCESS & SYSTEM METRICS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 138
+      },
+      "id": 50,
+      "title": "Running Processes & Threads",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_procs_running",
+          "legendFormat": "Processes Running",
+          "refId": "A"
+        },
+        {
+          "expr": "node_procs_blocked",
+          "legendFormat": "Processes Blocked (I/O)",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 138
+      },
+      "id": 51,
+      "title": "Prometheus Process Memory & CPU",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "process_resident_memory_bytes{job='prometheus'}",
+          "legendFormat": "Prometheus RSS",
+          "refId": "A"
+        },
+        {
+          "expr": "process_virtual_memory_bytes{job='prometheus'}",
+          "legendFormat": "Prometheus Virtual",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(process_cpu_seconds_total{job='prometheus'}[2m]) * 100",
+          "legendFormat": "Prometheus CPU %",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 146
+      },
+      "id": 52,
+      "title": "Open File Descriptors by Process",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "process_open_fds",
+          "legendFormat": "Open FDs ({{job}})",
+          "refId": "A"
+        },
+        {
+          "expr": "process_max_fds",
+          "legendFormat": "Max FDs ({{job}})",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 146
+      },
+      "id": 53,
+      "title": "Entropy Available (Randomness Pool)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_entropy_available_bits",
+          "legendFormat": "Entropy Bits Available",
+          "refId": "A"
+        },
+        {
+          "expr": "node_entropy_pool_size_bits",
+          "legendFormat": "Entropy Pool Size",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 154
+      },
+      "id": 1006,
+      "title": "PROMETHEUS & TSDB INTERNALS",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 155
+      },
+      "id": 60,
+      "title": "Prometheus Scrape Targets & Active Intervals",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "prometheus_sd_discovered_targets",
+          "legendFormat": "Discovered Targets ({{config}})",
+          "refId": "A"
+        },
+        {
+          "expr": "prometheus_target_scrape_pool_targets",
+          "legendFormat": "Active Targets",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 155
+      },
+      "id": 61,
+      "title": "Prometheus TSDB Head Series & Chunks",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "prometheus_tsdb_head_series",
+          "legendFormat": "Head Series",
+          "refId": "A"
+        },
+        {
+          "expr": "prometheus_tsdb_head_chunks",
+          "legendFormat": "Head Chunks",
+          "refId": "B"
+        },
+        {
+          "expr": "prometheus_tsdb_blocks_loaded",
+          "legendFormat": "Blocks Loaded",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "bytes",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 163
+      },
+      "id": 62,
+      "title": "Prometheus TSDB Storage Size",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "prometheus_tsdb_storage_blocks_bytes",
+          "legendFormat": "Blocks Size",
+          "refId": "A"
+        },
+        {
+          "expr": "prometheus_tsdb_wal_storage_size_bytes",
+          "legendFormat": "WAL Size",
+          "refId": "B"
+        },
+        {
+          "expr": "prometheus_tsdb_head_chunks_storage_size_bytes",
+          "legendFormat": "Chunks Storage",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "reqps",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 163
+      },
+      "id": 63,
+      "title": "Prometheus HTTP Request Rate",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(prometheus_http_requests_total[2m])",
+          "legendFormat": "{{handler}} {{code}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 171
+      },
+      "id": 64,
+      "title": "TSDB Samples Appended / Compactions",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(prometheus_tsdb_head_samples_appended_total[2m])",
+          "legendFormat": "Samples/s Appended",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(prometheus_tsdb_compactions_total[2m])",
+          "legendFormat": "Compactions/s",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 171
+      },
+      "id": 65,
+      "title": "Query Engine Duration",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "prometheus_engine_query_duration_seconds{slice='inner_eval'}",
+          "legendFormat": "Inner Eval",
+          "refId": "A"
+        },
+        {
+          "expr": "prometheus_engine_query_duration_seconds{slice='result_sort'}",
+          "legendFormat": "Result Sort",
+          "refId": "B"
+        },
+        {
+          "expr": "prometheus_engine_query_duration_seconds{slice='prepare_time'}",
+          "legendFormat": "Prepare Time",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 179
+      },
+      "id": 1007,
+      "title": "NOC SYSTEM HEALTH & SERVICES",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "DOWN"
+                },
+                "1": {
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 180
+      },
+      "id": 70,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Prometheus Up",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job='prometheus'}",
+          "legendFormat": "Prometheus",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "DOWN"
+                },
+                "1": {
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 180
+      },
+      "id": 71,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Node Exporter Up",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "up{job='node'}",
+          "legendFormat": "Node Exporter",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 180
+      },
+      "id": 72,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "CPU Steal (Cloud Hypervisor)",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "avg(rate(node_cpu_seconds_total{mode='steal'}[5m])) * 100",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 180
+      },
+      "id": 73,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background"
+      },
+      "title": "Active Prometheus Queries",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "prometheus_engine_queries",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 184
+      },
+      "id": 74,
+      "title": "Scrape Duration & Samples Scraped per Target",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "scrape_duration_seconds",
+          "legendFormat": "Scrape Duration ({{job}})",
+          "refId": "A"
+        },
+        {
+          "expr": "scrape_samples_scraped",
+          "legendFormat": "Samples Scraped ({{job}})",
+          "refId": "B"
+        },
+        {
+          "expr": "scrape_samples_post_metric_relabeling",
+          "legendFormat": "Post-relabel Samples ({{job}})",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 192
+      },
+      "id": 1008,
+      "title": "SYSTEM TEMPERATURES & HARDWARE",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 193
+      },
+      "id": 80,
+      "title": "Thermal Cooling Device States",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_cooling_device_cur_state",
+          "legendFormat": "Current State ({{name}})",
+          "refId": "A"
+        },
+        {
+          "expr": "node_cooling_device_max_state",
+          "legendFormat": "Max State ({{name}})",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 193
+      },
+      "id": 81,
+      "title": "NTP / Timex Clock Sync Status",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "node_timex_sync_status",
+          "legendFormat": "NTP Sync (1=synced)",
+          "refId": "A"
+        },
+        {
+          "expr": "node_timex_offset_seconds * 1000",
+          "legendFormat": "Clock Offset (ms)",
+          "refId": "B"
+        },
+        {
+          "expr": "node_timex_frequency_adjustment_ratio",
+          "legendFormat": "Frequency Adj Ratio",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 201
+      },
+      "id": 1009,
+      "title": "DISK READ/WRITE RATE SUMMARY",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "unit": "Bps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 52428800
+              },
+              {
+                "color": "red",
+                "value": 104857600
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 0,
+        "y": 202
+      },
+      "id": 90,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "displayMode": "gradient",
+        "orientation": "horizontal"
+      },
+      "title": "Disk Read Rate by Device",
+      "type": "bargauge",
+      "targets": [
+        {
+          "expr": "rate(node_disk_read_bytes_total[2m])",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "unit": "Bps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 52428800
+              },
+              {
+                "color": "red",
+                "value": 104857600
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 8,
+        "y": 202
+      },
+      "id": 91,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "displayMode": "gradient",
+        "orientation": "horizontal"
+      },
+      "title": "Disk Write Rate by Device",
+      "type": "bargauge",
+      "targets": [
+        {
+          "expr": "rate(node_disk_written_bytes_total[2m])",
+          "legendFormat": "{{device}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "unit": "Bps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 10485760
+              },
+              {
+                "color": "red",
+                "value": 104857600
+              }
+            ]
+          }
+        }
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 16,
+        "y": 202
+      },
+      "id": 92,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "displayMode": "gradient",
+        "orientation": "horizontal"
+      },
+      "title": "Network RX Rate by Interface",
+      "type": "bargauge",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total{device!='lo'}[2m])",
+          "legendFormat": "{{device}}",
+          "refId": "A"
         }
       ]
     }
   ],
-  "refresh": "5s",
-  "schemaVersion": 38,
-  "style": "dark",
-  "tags": ["airgap", "noc", "copilot", "predictive", "telemetry"],
-  "templating": {
-    "list": [
-      {
-        "current": { "selected": true, "text": "All", "value": "$__all" },
-        "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-        "definition": "label_values(airgap_component_health_score, org)",
-        "hide": 0,
-        "includeAll": true,
-        "multi": true,
-        "name": "org",
-        "options": [],
-        "query": {
-          "query": "label_values(airgap_component_health_score, org)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": { "selected": true, "text": "All", "value": "$__all" },
-        "datasource": { "type": "prometheus", "uid": "Prometheus-AirGap" },
-        "definition": "label_values(airgap_component_health_score, kind)",
-        "hide": 0,
-        "includeAll": true,
-        "multi": true,
-        "name": "kind",
-        "options": [],
-        "query": {
-          "query": "label_values(airgap_component_health_score, kind)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "sort": 1,
-        "type": "query"
-      }
-    ]
-  },
-  "time": { "from": "now-15m", "to": "now" },
-  "timepicker": {
-    "refresh_intervals": ["5s", "10s", "30s", "1m"]
-  },
-  "timezone": "browser",
-  "title": "AirGap Autonomous AI NOC Copilot Dashboard",
-  "uid": "airgap-noc-copilot",
   "version": 3
 }

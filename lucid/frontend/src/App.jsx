@@ -579,7 +579,14 @@ ${data.llm_insight}`;
                   { label: 'Latency', val: `${activeComponent.current_metrics?.latency_ms ?? 0} ms`, fill: Math.min(100, (activeComponent.current_metrics?.latency_ms ?? 0) * 1.5) },
                   { label: 'Packet Loss', val: `${activeComponent.current_metrics?.packet_loss_pct ?? 0}%`, fill: Math.min(100, (activeComponent.current_metrics?.packet_loss_pct ?? 0) * 20) },
                   { label: 'Active TCP', val: `${activeComponent.current_metrics?.active_tcp_connections ?? 0} conn`, fill: Math.min(100, (activeComponent.current_metrics?.active_tcp_connections ?? 0) / 2) },
-                  { label: 'Error Rate', val: `${activeComponent.current_metrics?.error_rate_pct ?? 0}%`, fill: Math.min(100, (activeComponent.current_metrics?.error_rate_pct ?? 0) * 10) }
+                  { label: 'Error Rate', val: `${activeComponent.current_metrics?.error_rate_pct ?? 0}%`, fill: Math.min(100, (activeComponent.current_metrics?.error_rate_pct ?? 0) * 10) },
+                  { label: 'Congestion Index', val: `${activeComponent.current_metrics?.congestion_index_pct ?? 0}%`, fill: activeComponent.current_metrics?.congestion_index_pct ?? 0 },
+                  { label: 'Buffer Occupancy', val: `${activeComponent.current_metrics?.buffer_occupancy_pct ?? 0}%`, fill: activeComponent.current_metrics?.buffer_occupancy_pct ?? 0 },
+                  { label: 'Traffic Bandwidth', val: `${activeComponent.current_metrics?.ingress_throughput_mbps ?? 0} Mbps`, fill: Math.min(100, (activeComponent.current_metrics?.ingress_throughput_mbps ?? 0) / 5) },
+                  { label: 'Failure State', val: activeComponent.current_metrics?.failure_active ? 'FAILURE ACTIVE' : 'NORMAL', fill: activeComponent.current_metrics?.failure_active ? 100 : 0 },
+                  { label: 'MTTR (Recovery)', val: `${activeComponent.current_metrics?.mttr_minutes ?? 2.15} min`, fill: Math.min(100, (activeComponent.current_metrics?.mttr_minutes ?? 2.15) * 15) },
+                  { label: 'MTBF (Reliability)', val: `${activeComponent.current_metrics?.mtbf_hours ?? 48} hrs`, fill: Math.min(100, (activeComponent.current_metrics?.mtbf_hours ?? 48) * 1.4) },
+                  { label: 'Availability', val: `${activeComponent.current_metrics?.availability_pct ?? 99.9}%`, fill: activeComponent.current_metrics?.availability_pct ?? 99.9 }
                 ].map((item, idx) => (
                   <div key={idx} className="detail-metric-card">
                     <span className="detail-metric-label">{item.label}</span>

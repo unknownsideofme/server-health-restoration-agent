@@ -7,7 +7,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8085;
 
-const pythonBin = path.join(__dirname, '../../.venv/bin/python3');
+const fs = require('fs');
+const venvPython = path.join(__dirname, '../../.venv/bin/python3');
+const pythonBin = process.env.PYTHON_BIN || (fs.existsSync(venvPython) ? venvPython : '/usr/bin/python3');
 const bridgeScript = path.join(__dirname, 'bridge.py');
 
 // Middleware

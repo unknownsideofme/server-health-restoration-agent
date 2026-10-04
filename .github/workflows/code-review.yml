@@ -30,6 +30,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+          allow-unsafe-pr-checkout: true
 
       # ------------------------------------------------------------
       # 2. Install Go

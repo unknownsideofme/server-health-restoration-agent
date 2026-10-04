@@ -212,6 +212,39 @@ def main():
         lines.append("# TYPE airgap_active_tcp_connections gauge")
         lines.append("# HELP airgap_error_rate_pct HTTP error percentage")
         lines.append("# TYPE airgap_error_rate_pct gauge")
+        # Network Congestion
+        lines.append("# HELP airgap_network_congestion_index Composite network congestion index (0-100%)")
+        lines.append("# TYPE airgap_network_congestion_index gauge")
+        lines.append("# HELP airgap_buffer_occupancy_pct Queue buffer occupancy percentage (0-100%)")
+        lines.append("# TYPE airgap_buffer_occupancy_pct gauge")
+        lines.append("# HELP airgap_queue_drop_rate_pps Queue buffer drop rate in packets/sec")
+        lines.append("# TYPE airgap_queue_drop_rate_pps gauge")
+        lines.append("# HELP airgap_traffic_headroom_pct Remaining bandwidth headroom percentage (0-100%)")
+        lines.append("# TYPE airgap_traffic_headroom_pct gauge")
+
+        # Traffic Throughput
+        lines.append("# HELP airgap_traffic_ingress_mbps Live ingress traffic throughput in Mbps")
+        lines.append("# TYPE airgap_traffic_ingress_mbps gauge")
+        lines.append("# HELP airgap_traffic_egress_mbps Live egress traffic throughput in Mbps")
+        lines.append("# TYPE airgap_traffic_egress_mbps gauge")
+        lines.append("# HELP airgap_traffic_packets_per_sec Live network packet rate in packets/sec")
+        lines.append("# TYPE airgap_traffic_packets_per_sec gauge")
+        lines.append("# HELP airgap_top_talker_flow_mbps Bandwidth consumed by top flows in Mbps")
+        lines.append("# TYPE airgap_top_talker_flow_mbps gauge")
+
+        # Failure State & SRE Reliability (MTTR / MTBF)
+        lines.append("# HELP airgap_component_failure_active Component failure state (1=Active Failure, 0=Normal)")
+        lines.append("# TYPE airgap_component_failure_active gauge")
+        lines.append("# HELP airgap_failure_severity Component failure severity (0=None, 1=Low, 2=Med, 3=High, 4=Crit)")
+        lines.append("# TYPE airgap_failure_severity gauge")
+        lines.append("# HELP airgap_failure_events_total Cumulative failure event count")
+        lines.append("# TYPE airgap_failure_events_total counter")
+        lines.append("# HELP airgap_mttr_minutes Mean Time To Recovery in minutes")
+        lines.append("# TYPE airgap_mttr_minutes gauge")
+        lines.append("# HELP airgap_mtbf_hours Mean Time Between Failures in hours")
+        lines.append("# TYPE airgap_mtbf_hours gauge")
+        lines.append("# HELP airgap_component_availability_pct Component availability percentage (0-100%)")
+        lines.append("# TYPE airgap_component_availability_pct gauge")
 
         for comp in get_dynamic_components():
             res = engine.analyze_component(comp["name"], comp["kind"])
@@ -233,6 +266,25 @@ def main():
             lines.append(f'airgap_network_traffic_bytes_sec{{{labels}}} {m.get("network_traffic_bytes_sec", 500000)}')
             lines.append(f'airgap_active_tcp_connections{{{labels}}} {m.get("active_tcp_connections", 120)}')
             lines.append(f'airgap_error_rate_pct{{{labels}}} {m.get("error_rate_pct", 0.0)}')
+            # Congestion
+            lines.append(f'airgap_network_congestion_index{{{labels}}} {m.get("congestion_index_pct", 0.0)}')
+            lines.append(f'airgap_buffer_occupancy_pct{{{labels}}} {m.get("buffer_occupancy_pct", 0.0)}')
+            lines.append(f'airgap_queue_drop_rate_pps{{{labels}}} {m.get("queue_drop_rate_pps", 0.0)}')
+            lines.append(f'airgap_traffic_headroom_pct{{{labels}}} {m.get("traffic_headroom_pct", 100.0)}')
+
+            # Traffic
+            lines.append(f'airgap_traffic_ingress_mbps{{{labels}}} {m.get("ingress_throughput_mbps", 0.0)}')
+            lines.append(f'airgap_traffic_egress_mbps{{{labels}}} {m.get("egress_throughput_mbps", 0.0)}')
+            lines.append(f'airgap_traffic_packets_per_sec{{{labels}}} {m.get("traffic_packets_per_sec", 0)}')
+            lines.append(f'airgap_top_talker_flow_mbps{{{labels}}} {m.get("top_talker_flow_mbps", 0.0)}')
+
+            # Failure & SRE Reliability
+            lines.append(f'airgap_component_failure_active{{{labels}}} {m.get("failure_active", 0)}')
+            lines.append(f'airgap_failure_severity{{{labels}}} {m.get("failure_severity", 0)}')
+            lines.append(f'airgap_failure_events_total{{{labels}}} {m.get("failure_events_total", 0)}')
+            lines.append(f'airgap_mttr_minutes{{{labels}}} {m.get("mttr_minutes", 2.15)}')
+            lines.append(f'airgap_mtbf_hours{{{labels}}} {m.get("mtbf_hours", 48.0)}')
+            lines.append(f'airgap_component_availability_pct{{{labels}}} {m.get("availability_pct", 99.9)}')
 
             if res.get("tti_minutes") is not None:
                 lines.append(f'airgap_time_to_impact_minutes{{{labels}}} {res["tti_minutes"]}')

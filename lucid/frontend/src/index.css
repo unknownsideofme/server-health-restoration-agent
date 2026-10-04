@@ -76,6 +76,9 @@ body.theme-light {
   --alert-bg-danger: rgba(225, 29, 72, 0.08);
   --alert-border-danger: rgba(225, 29, 72, 0.25);
   --alert-border-danger-hover: rgba(225, 29, 72, 0.5);
+  --alert-bg-danger: rgba(225, 29, 72, 0.08);
+  --alert-border-danger: rgba(225, 29, 72, 0.25);
+  --alert-border-danger-hover: rgba(225, 29, 72, 0.5);
   --btn-primary-hover: #4f46e5;
 }
 
