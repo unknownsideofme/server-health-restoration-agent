@@ -1,0 +1,17 @@
+[Unit]
+Description=Lucid Autonomous NOC Copilot Node.js & Prometheus Proxy Server
+After=network.target k3s.service
+
+[Service]
+Type=simple
+User={{ app_user }}
+WorkingDirectory={{ app_dir }}/lucid/backend
+Environment=PORT=8085
+Environment=PYTHON_BIN={{ app_dir }}/.venv/bin/python3
+Environment=KUBECONFIG=/home/{{ app_user }}/.kube/config
+ExecStart=/usr/bin/node {{ app_dir }}/lucid/backend/server.js
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

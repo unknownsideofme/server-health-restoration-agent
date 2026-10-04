@@ -1,0 +1,188 @@
+---
+- name: Deploy AirGap Autonomous NOC Copilot Full Infrastructure
+  hosts: all
+  become: true
+  vars:
+    app_user: "{{ ansible_user | default('ubuntu') }}"
+    app_dir: "/home/{{ app_user }}/server-health-restoration-agent"
+    repo_url: "https://github.com/unknownsideofme/server-health-restoration-agent.git"
+    repo_branch: "main"
+
+  tasks:
+    - name: 1. Update APT cache and upgrade basic packages
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: 2. Install base system dependencies
+      apt:
+        name:
+          - curl
+          - wget
+          - git
+          - jq
+          - build-essential
+          - python3
+          - python3-pip
+          - python3-venv
+          - python3-dev
+          - prometheus
+          - prometheus-node-exporter
+          - apt-transport-https
+          - software-properties-common
+          - ca-certificates
+        state: present
+
+    - name: 3. Install Node.js 20.x LTS repository
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+
+    - name: 4. Install Node.js and npm
+      apt:
+        name: nodejs
+        state: present
+
+    - name: 5. Install Grafana official repository key
+      shell: |
+        mkdir -p /etc/apt/keyrings/
+        wget -q -O - https://apt.grafana.com/gpg.key | gpg --dearmor -o /etc/apt/keyrings/grafana.gpg --yes
+      args:
+        creates: /etc/apt/keyrings/grafana.gpg
+
+    - name: 6. Add Grafana APT repository
+      copy:
+        dest: /etc/apt/sources.list.d/grafana.list
+        content: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main\n"
+
+    - name: 7. Install Grafana Enterprise / Server
+      apt:
+        name: grafana
+        update_cache: yes
+        state: present
+
+    - name: 8. Install K3s Lightweight Kubernetes
+      shell: |
+        curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode 644" sh -
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: 9. Set up Kubeconfig for user
+      shell: |
+        mkdir -p /home/{{ app_user }}/.kube
+        cp /etc/rancher/k3s/k3s.yaml /home/{{ app_user }}/.kube/config
+        chown -R {{ app_user }}:{{ app_user }}/home/{{ app_user }}/.kube
+        chmod 600 /home/{{ app_user }}/.kube/config
+      args:
+        creates: /home/{{ app_user }}/.kube/config
+
+    - name: 10. Clone server-health-restoration-agent repository
+      git:
+        repo: "{{ repo_url }}"
+        version: "{{ repo_branch }}"
+        dest: "{{ app_dir }}"
+        force: no
+      become_user: "{{ app_user }}"
+
+    - name: 11. Create Python virtual environment (.venv)
+      shell: |
+        python3 -m venv {{ app_dir }}/.venv
+        {{ app_dir }}/.venv/bin/pip install --upgrade pip
+      args:
+        creates: "{{ app_dir }}/.venv/bin/activate"
+      become_user: "{{ app_user }}"
+
+    - name: 12. Install Python controller and telemetry dependencies
+      shell: |
+        {{ app_dir }}/.venv/bin/pip install -r {{ app_dir }}/controllers/requirements.txt
+        {{ app_dir }}/.venv/bin/pip install kubernetes prometheus-client requests urllib3
+      become_user: "{{ app_user }}"
+
+    - name: 13. Install npm dependencies and build Lucid frontend
+      shell: |
+        cd {{ app_dir }}/lucid/frontend
+        npm install
+        npm run build
+      become_user: "{{ app_user }}"
+
+    - name: 14. Install npm dependencies for Lucid backend
+      shell: |
+        cd {{ app_dir }}/lucid/backend
+        npm install
+      become_user: "{{ app_user }}"
+
+    - name: 15. Apply AirGap Custom Resource Definitions (CRDs)
+      shell: |
+        export KUBECONFIG=/home/{{ app_user }}/.kube/config
+        kubectl apply -f {{ app_dir }}/crds/
+      become_user: "{{ app_user }}"
+
+    - name: 16. Apply AirGap Topology and System Resources
+      shell: |
+        export KUBECONFIG=/home/{{ app_user }}/.kube/config
+        kubectl apply -f {{ app_dir }}/examples/airgap-system.yaml
+      become_user: "{{ app_user }}"
+
+    - name: 17. Configure Prometheus scrape jobs
+      template:
+        src: templates/prometheus.yml.j2
+        dest: /etc/prometheus/prometheus.yml
+        owner: prometheus
+        group: prometheus
+        mode: '0644'
+      notify: Restart Prometheus
+
+    - name: 18. Configure Grafana Prometheus datasource
+      template:
+        src: templates/grafana-datasource.yml.j2
+        dest: /etc/grafana/provisioning/datasources/prometheus.yaml
+        owner: root
+        group: grafana
+        mode: '0644'
+      notify: Restart Grafana
+
+    - name: 19. Configure Grafana automated dashboard provider
+      template:
+        src: templates/grafana-dashboards.yml.j2
+        dest: /etc/grafana/provisioning/dashboards/airgap-dashboards.yaml
+        owner: root
+        group: grafana
+        mode: '0644'
+      notify: Restart Grafana
+
+    - name: 20. Deploy AirGap Controller systemd service
+      template:
+        src: templates/airgap-controller.service.j2
+        dest: /etc/systemd/system/airgap-controller.service
+        mode: '0644'
+
+    - name: 21. Deploy Lucid Backend systemd service
+      template:
+        src: templates/lucid-backend.service.j2
+        dest: /etc/systemd/system/lucid-backend.service
+        mode: '0644'
+
+    - name: 22. Enable and start all infrastructure services
+      systemd:
+        daemon_reload: yes
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop:
+        - prometheus-node-exporter
+        - prometheus
+        - grafana-server
+        - airgap-controller
+        - lucid-backend
+
+  handlers:
+    - name: Restart Prometheus
+      systemd:
+        name: prometheus
+        state: restarted
+
+    - name: Restart Grafana
+      systemd:
+        name: grafana-server
+        state: restarted

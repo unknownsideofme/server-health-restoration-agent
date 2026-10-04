@@ -1,0 +1,16 @@
+[Unit]
+Description=AirGap Autonomous Kubernetes Operator & Predictive Telemetry Controller
+After=k3s.service network.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+WorkingDirectory={{ app_dir }}
+Environment=KUBECONFIG=/home/{{ app_user }}/.kube/config
+Environment=PYTHONPATH={{ app_dir }}
+ExecStart={{ app_dir }}/.venv/bin/python3 {{ app_dir }}/controllers/airgap_controller.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
